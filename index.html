@@ -1,0 +1,2517 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GUJIX (gujitokens.online) — Solana Token Studio, 10-Bot Booster & Pro Tools</title>
+
+  <!-- 1. AUTO-HTTPS REDIRECT (Phantom REQUIRES HTTPS on live domains!) -->
+  <script>
+    if (location.protocol === 'http:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+      location.replace('https:' + location.href.substring(location.protocol.length));
+    }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- 2. OFFICIAL BUFFER & SOLANA WEB3.JS FROM CLOUDFLARE/JSDelivr -->
+  <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
+  <script>
+    window.global = window;
+    if (typeof buffer !== "undefined" && buffer.Buffer) {
+      window.Buffer = buffer.Buffer;
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #FAFAFC; }
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-20px) scale(1.05); }
+    }
+    .animate-float { animation: floatSlow 7s ease-in-out infinite; }
+    .animate-float-delay { animation: floatSlow 9s ease-in-out 2s infinite; }
+  </style>
+</head>
+<body class="text-slate-900 min-h-screen flex flex-col justify-between relative overflow-x-hidden selection:bg-indigo-600 selection:text-white">
+
+  <div class="pointer-events-none fixed inset-0 overflow-hidden z-0">
+    <div class="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-indigo-200/50 blur-3xl animate-float"></div>
+    <div class="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-sky-200/50 blur-3xl animate-float-delay"></div>
+    <div class="absolute -bottom-32 left-1/3 h-96 w-96 rounded-full bg-purple-200/40 blur-3xl animate-float"></div>
+  </div>
+
+  <!-- TOP OFFICIAL COMMUNITY BAR -->
+  <div class="relative z-30 bg-slate-900 text-white text-xs py-2 px-4">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2 font-semibold">
+        <span class="px-2 py-0.5 rounded bg-indigo-600 text-[10px] font-black uppercase">Official</span>
+        <span data-i18n="topBarTitle" class="truncate">GUJIX Solana Token Studio & Web3 Ecosystem</span>
+      </div>
+      <div class="flex items-center gap-3 sm:gap-4 font-bold text-[11px] sm:text-xs">
+        <a href="https://gujitokens.online" target="_blank" class="hover:text-indigo-400 transition">🌐 gujitokens.online</a>
+        <a href="https://x.com/gujitokens" target="_blank" class="hover:text-sky-400 transition">𝕏 @gujitokens</a>
+        <a href="https://t.me/gujitokens000" target="_blank" class="hover:text-sky-300 transition">✈️ Telegram</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-30 backdrop-blur-xl bg-white/90 border-b border-slate-200/80">
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      
+      <div class="flex items-center justify-between w-full md:w-auto">
+        <div class="flex items-center gap-2.5">
+          <div onclick="window.switchView('launcher')" class="h-10 w-10 sm:h-11 sm:w-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-sky-500 flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-lg shadow-indigo-500/25 hover:scale-105 transition-all cursor-pointer shrink-0">
+            G
+          </div>
+          <span onclick="window.switchView('launcher')" class="text-xl sm:text-2xl font-black tracking-tight bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-800 bg-clip-text text-transparent cursor-pointer">GUJIX</span>
+          
+          <div id="adminBadge" class="hidden items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-extrabold shadow-sm">
+            👑 ADMIN (0 FEE)
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5 md:hidden">
+          <div class="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+            <button type="button" onclick="window.setLang('ka')" id="lang-ka-mob" class="px-1.5 py-1 rounded-md text-[10px] font-extrabold uppercase bg-white text-indigo-600 shadow-sm">KA</button>
+            <button type="button" onclick="window.setLang('en')" id="lang-en-mob" class="px-1.5 py-1 rounded-md text-[10px] font-extrabold uppercase text-slate-500">EN</button>
+            <button type="button" onclick="window.setLang('ru')" id="lang-ru-mob" class="px-1.5 py-1 rounded-md text-[10px] font-extrabold uppercase text-slate-500">RU</button>
+          </div>
+          <button id="walletBtnMobile" type="button" onclick="window.connectWallet()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl shadow-md shadow-indigo-500/20 active:scale-95 cursor-pointer">
+            Select Wallet
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between md:justify-center gap-2 overflow-x-auto pb-1 md:pb-0">
+        <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shrink-0">
+          <button type="button" onclick="window.switchView('launcher')" id="tab-launcher" data-i18n="navLauncher" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-extrabold bg-white text-indigo-600 shadow-sm transition-all cursor-pointer">
+            🚀 Launcher
+          </button>
+          <button type="button" onclick="window.switchView('booster')" id="tab-booster" data-i18n="navBooster" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-extrabold text-slate-600 hover:text-slate-900 transition-all cursor-pointer">
+            🤖 Bot Booster
+          </button>
+          <button type="button" onclick="window.switchView('tools')" id="tab-tools" data-i18n="navTools" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-extrabold text-slate-600 hover:text-slate-900 transition-all cursor-pointer">
+            🧰 Pro Tools
+          </button>
+        </div>
+
+        <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shrink-0">
+          <button type="button" onclick="window.setNetwork('mainnet')" id="net-mainnet" class="px-2 sm:px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold uppercase bg-indigo-600 text-white shadow-sm transition-all cursor-pointer">
+            Mainnet
+          </button>
+          <button type="button" onclick="window.setNetwork('devnet')" id="net-devnet" class="px-2 sm:px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold uppercase text-slate-500 hover:text-slate-900 transition-all cursor-pointer">
+            Devnet
+          </button>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center gap-2 shrink-0">
+        <button id="airdropBtn" type="button" onclick="window.requestAirdrop()" class="hidden items-center gap-1 px-3 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-300 text-amber-800 text-xs font-extrabold transition-all cursor-pointer">
+          ⚡ +1 Test SOL
+        </button>
+
+        <button id="adminPanelBtn" type="button" onclick="window.switchView('admin')" class="hidden items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-indigo-600 text-white text-xs font-extrabold shadow-sm transition-all cursor-pointer">
+          📊 Admin
+        </button>
+
+        <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+          <button type="button" onclick="window.setLang('ka')" id="lang-ka" class="px-2 py-1 rounded-lg text-xs font-extrabold uppercase bg-white text-indigo-600 shadow-sm transition-all cursor-pointer">KA</button>
+          <button type="button" onclick="window.setLang('en')" id="lang-en" class="px-2 py-1 rounded-lg text-xs font-extrabold uppercase text-slate-500 hover:text-slate-900 transition-all cursor-pointer">EN</button>
+          <button type="button" onclick="window.setLang('ru')" id="lang-ru" class="px-2 py-1 rounded-lg text-xs font-extrabold uppercase text-slate-500 hover:text-slate-900 transition-all cursor-pointer">RU</button>
+        </div>
+
+        <button id="walletBtn" type="button" onclick="window.connectWallet()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-4 py-2.5 rounded-xl shadow-md shadow-indigo-500/20 transition-all active:scale-95 cursor-pointer">
+          Select Wallet
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="devnetBanner" data-i18n="devnetBanner" class="hidden bg-amber-500 text-white text-xs font-bold py-2 px-4 text-center shadow-sm">
+    🧪 ჩართულია DEVNET (სატესტო რეჟიმი). ყველა ხელსაწყო, ტოკენის შექმნა და ბოტები მუშაობს უფასო სატესტო SOL-ით!
+  </div>
+
+  <!-- 1. ADMIN DASHBOARD -->
+  <section id="view-admin" class="hidden relative z-10 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10">
+    <div class="bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 p-5 sm:p-8 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-extrabold mb-2">
+            👑 GUJIX Administrator Control Center
+          </div>
+          <h2 data-i18n="adminTitle" class="text-2xl sm:text-3xl font-black text-slate-900">დაკავშირებული საფულეების დაშბორდი</h2>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" onclick="window.loadAdminWallets()" data-i18n="btnRefresh" class="px-4 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs cursor-pointer">🔄 განახლება</button>
+          <button type="button" onclick="window.downloadWalletsJson()" class="px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs cursor-pointer">📥 Export JSON</button>
+          <button type="button" onclick="window.clearAdminWallets()" data-i18n="btnClear" class="px-4 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs cursor-pointer">🗑️ გასუფთავება</button>
+          <button type="button" onclick="window.switchView('launcher')" data-i18n="btnBack" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer">← უკან</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+          <p data-i18n="adminStatWallets" class="text-xs font-bold uppercase text-slate-400">უნიკალური საფულეები</p>
+          <p id="statTotalWallets" class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">0</p>
+        </div>
+        <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+          <p data-i18n="adminStatBalance" class="text-xs font-bold uppercase text-slate-400">ჯამური ბალანსი (SOL)</p>
+          <p id="statTotalSol" class="text-2xl sm:text-3xl font-black text-indigo-600 mt-1">0.00 SOL</p>
+        </div>
+        <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+          <p data-i18n="adminStatMints" class="text-xs font-bold uppercase text-slate-400">შექმნილი ტოკენები</p>
+          <p id="statTotalMints" class="text-2xl sm:text-3xl font-black text-emerald-600 mt-1">0</p>
+        </div>
+        <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+          <p data-i18n="adminStatFees" class="text-xs font-bold uppercase text-slate-400">ტარიფები (Launch/Bot/Tools)</p>
+          <p class="text-lg sm:text-xl font-black text-slate-900 mt-1">0.09 / 0.1 / 0.05 SOL</p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-200">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
+              <th class="py-3.5 px-4">#</th>
+              <th class="py-3.5 px-4">Wallet Address</th>
+              <th data-i18n="thBalance" class="py-3.5 px-4">ბალანსი</th>
+              <th data-i18n="thNetwork" class="py-3.5 px-4">ქსელი</th>
+              <th data-i18n="thTokens" class="py-3.5 px-4">ტოკენები</th>
+              <th data-i18n="thVisits" class="py-3.5 px-4">შემოსვლები</th>
+              <th data-i18n="thLastSeen" class="py-3.5 px-4">ბოლო აქტივობა</th>
+              <th data-i18n="thAction" class="py-3.5 px-4">მოქმედება</th>
+            </tr>
+          </thead>
+          <tbody id="adminWalletsTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. BOT BOOSTER VIEW -->
+  <section id="view-booster" class="hidden relative z-10 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-8">
+    <div class="text-center max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm text-xs font-semibold text-indigo-600 mb-3">
+        🤖 <span data-i18n="botBadge">GUJIX Multi-Wallet Volume & Maker Booster</span>
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
+        <span data-i18n="botHero1">ტოკენის ბუსტერი & </span>
+        <span data-i18n="botHero2" class="bg-gradient-to-r from-indigo-600 to-sky-500 bg-clip-text text-transparent">10 ბოტ-საფულის მართვა</span>
+      </h2>
+      <p data-i18n="botHeroSub" class="text-slate-500 mt-2 text-xs sm:text-sm">
+        შექმენი 1-დან 10-მდე რენდომ საფულე, გადაანაწილე SOL ერთი ტრანზაქციით და მართე ყიდვა-გაყიდვა (სხვებისთვის: 0.1 SOL | ადმინისთვის: უფასო).
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-6 bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h3 data-i18n="botStep1Title" class="text-base font-extrabold text-slate-900">1. ბოტების გენერაცია & შევსება</h3>
+            <p data-i18n="botStep1Sub" class="text-xs text-slate-400">თითოეულ ბოტს ექნება საკუთარი უნიკალური მისამართი</p>
+          </div>
+          <span id="botFeeBadge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-indigo-50 text-indigo-600 border border-indigo-200">
+            Fee: 0.1 SOL
+          </span>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label data-i18n="botCountLabel" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">ბოტების რაოდენობა (1 - 10)</label>
+            <div class="flex gap-2">
+              <input type="number" id="botCountInput" value="5" min="1" max="10" class="w-20 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold outline-none" />
+              <button type="button" onclick="window.generateBotWallets()" data-i18n="botGenBtn" class="flex-1 bg-slate-900 hover:bg-indigo-600 text-white font-bold text-xs px-3 py-2.5 rounded-xl cursor-pointer">
+                🎲 Generate
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label data-i18n="botSolPerLabel" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">SOL თითო ბოტზე</label>
+            <div class="flex gap-2">
+              <input type="number" id="solPerBotInput" value="0.05" step="0.01" min="0.005" class="w-24 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold outline-none" />
+              <button type="button" onclick="window.fundAllBots()" data-i18n="botFundBtn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-3 py-2.5 rounded-xl shadow-md cursor-pointer">
+                💸 Fund Bots
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+          <div class="flex gap-2">
+            <button type="button" onclick="window.refreshBotBalances()" data-i18n="btnRefresh" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 cursor-pointer">🔄 განახლება</button>
+            <button type="button" onclick="window.exportBotKeys()" data-i18n="botExportBtn" class="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold cursor-pointer">🔑 Export Keys</button>
+          </div>
+          <button type="button" onclick="window.collectAllSolToMain()" data-i18n="botCollectBtn" class="px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold cursor-pointer">
+            📥 Collect All SOL Back
+          </button>
+        </div>
+      </div>
+
+      <div class="lg:col-span-6 bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h3 data-i18n="botStep2Title" class="text-base font-extrabold text-slate-900">2. ტოკენის ყიდვა / გაყიდვა (Swap პანელი)</h3>
+            <p data-i18n="botStep2Sub" class="text-xs text-slate-400">Wallet funding and balance management; trading automation disabled</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200">Jupiter V6</span>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-3">
+          <div class="sm:col-span-2">
+            <label data-i18n="botTargetLabel" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Target Token Mint (ან DexScreener ლინკი) *</label>
+            <input id="targetMintInput" data-i18n-ph="phTargetMint" placeholder="ჩასვი ტოკენის მისამართი ან DexScreener ლინკი..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-mono outline-none" />
+          </div>
+          <div>
+            <label data-i18n="botBuyAmtLabel" class="block text-xs font-bold uppercase text-slate-500 mb-1.5">Buy Amount (SOL)</label>
+            <input type="number" id="botTradeSolInput" value="0.02" step="0.005" min="0.001" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-bold outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+          <button type="button" onclick="window.executeAllBotsSwap('BUY')" data-i18n="botBuyAllBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs py-3 px-4 rounded-xl shadow-md cursor-pointer">🟢 Buy All Bots</button>
+          <button type="button" onclick="window.executeAllBotsSwap('SELL')" data-i18n="botSellAllBtn" class="bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs py-3 px-4 rounded-xl shadow-md cursor-pointer">🔴 Sell All (100%)</button>
+          <button type="button" id="autoLoopBtn" onclick="window.toggleAutoBoostLoop()" data-i18n="botAutoStartBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs py-3 px-4 rounded-xl shadow-md cursor-pointer">🔄 Start Auto-Boost</button>
+        </div>
+
+        <div id="botStatusBox" data-i18n="botReadyStatus" class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-600 text-center">
+          მზადაა: შექმენი ბოტ-საფულეები და გადაანაწილე SOL.
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 data-i18n="botTableTitle" class="text-base sm:text-lg font-black text-slate-900">📊 ბოტ-საფულეების სამართავი დაშბორდი</h3>
+        <span id="activeBotsCountBadge" class="text-xs font-bold text-slate-500">0 Wallets Loaded</span>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-200">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
+              <th class="py-3.5 px-4">Bot #</th>
+              <th data-i18n="thBotPub" class="py-3.5 px-4">Public Address (პირადი მისამართი)</th>
+              <th data-i18n="thSolBal" class="py-3.5 px-4">SOL ბალანსი</th>
+              <th data-i18n="thTokBal" class="py-3.5 px-4">Token ბალანსი</th>
+              <th data-i18n="thStatus" class="py-3.5 px-4">სტატუსი</th>
+              <th data-i18n="thBotCtrl" class="py-3.5 px-4 text-right">ინდივიდუალური მართვა</th>
+            </tr>
+          </thead>
+          <tbody id="botTableBody" class="divide-y divide-slate-100 text-sm">
+            <tr><td colspan="6" data-i18n="botEmptyRow" class="py-10 text-center text-slate-400">დააჭირე "🎲 Generate"-ს ბოტების შესაქმნელად</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2.5 PRO TOOLS & HUB VIEW -->
+  <section id="view-tools" class="hidden relative z-10 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-8">
+    <div class="text-center max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm text-xs font-semibold text-indigo-600 mb-3">
+        🧰 <span data-i18n="toolsBadge">GUJIX Solana Pro Ecosystem Tools</span>
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-black tracking-tight text-slate-900">
+        <span data-i18n="toolsHero1">პროფესიონალური </span>
+        <span data-i18n="toolsHero2" class="bg-gradient-to-r from-indigo-600 to-sky-500 bg-clip-text text-transparent">Solana ხელსაწყოები</span>
+      </h2>
+      <p data-i18n="toolsHeroSub" class="text-slate-500 mt-2 text-xs sm:text-sm">
+        ყველაფერი ერთ სივრცეში: LP/Token Burner, Multisender Airdrop, 1-Click Website Builder, Anti-Rug სკანერი და რეფერალური სისტემა.
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6">
+      <div class="bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h3 data-i18n="tool1Title" class="text-base font-extrabold text-slate-900">🔥 1. Token & LP Burner (დაწვა)</h3>
+            <p data-i18n="tool1Sub" class="text-xs text-slate-400">დაწვი ტოკენების ან LP-ის ნაწილი მწვანე ბოქლომისთვის</p>
+          </div>
+          <span class="toolFeeTag px-3 py-1 rounded-full text-xs font-extrabold bg-rose-50 text-rose-600 border border-rose-200">Fee: 0.05 SOL</span>
+        </div>
+        <div class="space-y-3">
+          <input id="burnMintInput" data-i18n-ph="phBurnMint" placeholder="Token ან LP Mint Address (ან DexScreener ლინკი)..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-mono outline-none" />
+          <div class="grid grid-cols-2 gap-3">
+            <input type="number" id="burnAmountInput" data-i18n-ph="phBurnAmt" placeholder="რაოდენობა (მაგ: 1000000)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold outline-none" />
+            <input type="text" id="burnDecimalsInput" value="Auto-detected from Mint" readonly aria-label="Token decimals are detected automatically" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-500 outline-none" />
+          </div>
+          <button type="button" onclick="window.executeBurnTokens()" data-i18n="tool1Btn" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs py-3 rounded-xl shadow-md cursor-pointer">
+            🔥 Burn Tokens Permanently
+          </button>
+          <div id="burnStatusBox" class="hidden p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-center"></div>
+        </div>
+      </div>
+
+      <div class="bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h3 data-i18n="tool2Title" class="text-base font-extrabold text-slate-900">🪂 2. Multisender / Airdrop Tool</h3>
+            <p data-i18n="tool2Sub" class="text-xs text-slate-400">გადაუგზავნე SOL ბევრ საფულეს 1 კლიკით</p>
+          </div>
+          <span class="toolFeeTag px-3 py-1 rounded-full text-xs font-extrabold bg-indigo-50 text-indigo-600 border border-indigo-200">Fee: 0.05 SOL</span>
+        </div>
+        <div class="space-y-3">
+          <input id="airdropTokenMint" data-i18n-ph="phAirdropMint" placeholder="Token Mint (დატოვე ცარიელი თუ SOL-ს აგზავნი)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-mono outline-none" />
+          <textarea id="multisendListInput" data-i18n-ph="phMultisendList" placeholder="საფულის_მისამართი,რაოდენობა (მაგ: PKu7aRDnBW3pvzKQcE3eYZAgg8rDxgQSWsBksAg58D8,0.01)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-mono h-20 resize-none outline-none"></textarea>
+          <button type="button" onclick="window.executeMultisend()" data-i18n="tool2Btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs py-3 rounded-xl shadow-md cursor-pointer">
+            🪂 Send Multi-Airdrop (1 Click)
+          </button>
+          <div id="multisendStatusBox" class="hidden p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-center"></div>
+        </div>
+      </div>
+
+      <div class="bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h3 data-i18n="tool3Title" class="text-base font-extrabold text-slate-900">🌐 3. 1-Click Token Website Builder</h3>
+            <p data-i18n="tool3Sub" class="text-xs text-slate-400">შექმენი მზა Landing Page ჩარტით და Jupiter ყიდვის ღილაკით</p>
+          </div>
+          <span class="toolFeeTag px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">Fee: 0.05 SOL</span>
+        </div>
+        <div class="space-y-3">
+          <div class="grid grid-cols-2 gap-3">
+            <input id="siteNameInput" data-i18n-ph="phSiteName" placeholder="Token Name (მაგ: GUJIX)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none" />
+            <input id="siteSymbolInput" data-i18n-ph="phSiteSym" placeholder="Symbol (მაგ: GJX)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none" />
+          </div>
+          <input id="siteMintInput" data-i18n-ph="phSiteMint" placeholder="Token Mint ან DexScreener ლინკი *" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono outline-none" />
+          <input id="siteDescInput" data-i18n-ph="phSiteDesc" placeholder="მოკლე აღწერა საიტისთვის..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none" />
+          <div class="grid grid-cols-2 gap-3">
+            <button type="button" onclick="window.generateTokenWebsite('preview')" data-i18n="tool3BtnPreview" class="bg-slate-900 hover:bg-indigo-600 text-white font-extrabold text-xs py-3 rounded-xl cursor-pointer">
+              🌐 გახსენი Live საიტი ↗
+            </button>
+            <button type="button" onclick="window.generateTokenWebsite('download')" data-i18n="tool3BtnDownload" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs py-3 rounded-xl cursor-pointer">
+              📥 გადმოწერე HTML
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h3 data-i18n="tool4Title" class="text-base font-extrabold text-slate-900">🕵️ 4. Anti-Rug Security Scanner (+ DexScreener)</h3>
+            <p data-i18n="tool4Sub" class="text-xs text-slate-400">მუშაობს ნებისმიერ ახალ ტოკენზე, Pair მისამართზე ან ლინკზე</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">FREE TOOL</span>
+        </div>
+        <div class="space-y-3">
+          <div class="flex gap-2">
+            <input id="scanMintInput" data-i18n-ph="phScanMint" placeholder="ჩასვი ტოკენის/Pair მისამართი ან DexScreener ლინკი..." class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-mono outline-none" />
+            <button type="button" onclick="window.scanTokenSecurity()" data-i18n="tool4Btn" class="bg-slate-900 hover:bg-indigo-600 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl cursor-pointer">
+              🔍 Scan
+            </button>
+          </div>
+          <div id="scanResultBox" data-i18n="tool4Ready" class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1.5 text-slate-600">
+            ჩაწერე ნებისმიერი ახალი ტოკენის მისამართი (თუნდაც პატარა ასოებით DexScreener-იდან) და დააჭირე Scan-ს.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-500 rounded-3xl p-5 sm:p-8 text-white shadow-xl flex flex-wrap items-center justify-between gap-6">
+      <div class="space-y-2 max-w-xl">
+        <span data-i18n="refBadge" class="px-3 py-1 rounded-full bg-white/20 text-xs font-extrabold uppercase tracking-wider">🤝 Referral Cashback System</span>
+        <h3 data-i18n="refTitle" class="text-xl sm:text-2xl font-black">მოიწვიე მეგობრები და მიიღე 0.02 SOL მომენტალურად!</h3>
+        <p data-i18n="refSub" class="text-white/85 text-xs sm:text-sm">
+          როცა ვინმე შენი რეფერალური ლინკით შექმნის ტოკენს (0.09 SOL), სმარტ-ტრანზაქცია ავტომატურად ჩაგირიცხავს 0.02 SOL-ს პირდაპირ შენს საფულეზე!
+        </p>
+      </div>
+      <div class="flex-1 min-w-[260px] bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 space-y-2">
+        <label data-i18n="refLabel" class="text-[11px] font-bold uppercase text-white/80">შენი პერსონალური რეფერალური ლინკი:</label>
+        <div class="flex gap-2">
+          <input id="myRefLinkInput" readonly value="https://gujitokens.online/?ref=YOUR_WALLET" class="flex-1 bg-white text-slate-900 rounded-xl px-3 py-2 text-xs font-mono outline-none" />
+          <button type="button" onclick="window.copyReferralLink()" data-i18n="btnCopyLink" class="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-4 py-2 rounded-xl cursor-pointer">
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. MAIN TOKEN LAUNCHER VIEW -->
+  <main id="view-launcher" class="relative z-10 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12">
+    <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm text-xs font-semibold text-slate-600 mb-4">
+        ✨ <span data-i18n="badge">Solana SPL Token Launcher — gujitokens.online</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 leading-tight">
+        <span data-i18n="hero1">შექმენი შენი ტოკენი</span>
+        <span data-i18n="hero2" class="bg-gradient-to-r from-indigo-600 to-sky-500 bg-clip-text text-transparent"> 1 კლიკით</span>
+      </h1>
+      <p data-i18n="heroSub" class="text-slate-500 mt-3 text-sm sm:text-lg">
+        მომენტალური დეპლოი Solana-ზე, სრული IPFS მეტადატა (Twitter, Telegram, Website) და Mint და Freeze უფლებების გაუქმება და Metadata-ის უცვლელად შექმნა.
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+      <form onsubmit="window.handleCreateToken(event)" class="lg:col-span-7 bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 p-5 sm:p-8 shadow-sm space-y-5 sm:space-y-6">
+        <div class="p-4 rounded-2xl bg-amber-50/90 border border-amber-200 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-1">
+            <label data-i18n="pinataLabel" class="text-xs font-bold text-amber-900">🔑 Pinata JWT API Key (IPFS-ზე ლოგოს და მეტადატის ასატვირთად) *</label>
+            <a href="https://app.pinata.cloud/developers/api-keys" target="_blank" data-i18n="pinataLink" class="text-[11px] font-bold text-indigo-600 underline">აიღე უფასოდ Pinata-ზე →</a>
+          </div>
+          <input required id="pinataInput" type="password" autocomplete="off" data-i18n-ph="phPinata" placeholder="ჩასვი შენი Pinata JWT კოდი (იწყება eyJ...)" class="w-full bg-white border border-amber-300 rounded-xl px-3.5 py-2 text-xs font-mono outline-none" />
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4 sm:gap-5">
+          <div>
+            <label data-i18n="nameLabel" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">ტოკენის სახელი *</label>
+            <input required id="nameInput" oninput="window.updatePreview()" data-i18n-ph="phName" placeholder="მაგ: Gujix Protocol" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-slate-900 outline-none" />
+          </div>
+          <div>
+            <label data-i18n="symbolLabel" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">სიმბოლო (Ticker) *</label>
+            <input required id="symbolInput" oninput="this.value=this.value.toUpperCase(); window.updatePreview()" data-i18n-ph="phSymbol" placeholder="მაგ: GUJIX" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-slate-900 font-bold outline-none" />
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4 sm:gap-5">
+          <div>
+            <label data-i18n="supplyLabel" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">მთლიანი რაოდენობა (Supply) *</label>
+            <input required type="number" id="supplyInput" value="1000000000" oninput="window.updatePreview()" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-slate-900 outline-none" />
+          </div>
+          <div>
+            <label data-i18n="decimalsLabel" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Decimals *</label>
+            <input required type="number" id="decimalsInput" value="9" min="0" max="9" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-slate-900 outline-none" />
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200/80 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <span data-i18n="vanityTitle" class="text-xs font-extrabold text-indigo-950">🎯 Custom Vanity Mint Address (VIP ფუნქცია)</span>
+              <p data-i18n="vanitySub" class="text-[11px] text-slate-500">შექმენი ლამაზი კონტრაქტის მისამართი სასურველი საწყისი ასოებით (1-3 სიმბოლო)</p>
+            </div>
+            <span id="vanityFeeBadge" class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-indigo-100 text-indigo-700">+0.05 SOL</span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <input id="vanityPrefixInput" maxlength="3" data-i18n-ph="phVanity" placeholder="მაგ: GJ ან SOL" class="w-36 bg-white border border-indigo-200 rounded-xl px-3 py-2 text-xs font-mono font-bold outline-none" />
+            <button type="button" id="vanityBtn" onclick="window.findVanityAddress()" data-i18n="vanityFindBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl cursor-pointer">
+              🔍 Find Address
+            </button>
+            <button type="button" onclick="window.clearVanityAddress()" data-i18n="vanityResetBtn" class="bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 font-bold text-xs px-3 py-2 rounded-xl cursor-pointer">
+              Reset
+            </button>
+          </div>
+          <div id="vanityStatusText" class="text-xs font-mono text-indigo-700 font-bold hidden break-all"></div>
+        </div>
+
+        <div>
+          <label data-i18n="logoLabel" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">ტოკენის ლოგო (PNG, JPG, GIF) *</label>
+          <label class="group flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-slate-200 hover:border-indigo-500 rounded-2xl cursor-pointer bg-slate-50/50 transition-all">
+            <div class="flex flex-col items-center justify-center pt-5 pb-6 px-2 text-center">
+              <div class="p-3 rounded-xl bg-white shadow-sm border border-slate-100 mb-2 text-lg">📤</div>
+              <p id="fileNameText" data-i18n="logoUploadText" class="text-sm font-medium text-slate-600">დააჭირე ლოგოს ასატვირთად</p>
+              <p data-i18n="logoUploadHint" class="text-xs text-slate-400 mt-1">რეკომენდებულია 500x500px კვადრატული სურათი</p>
+            </div>
+            <input required type="file" id="logoInput" accept="image/*" onchange="window.previewFile(event)" class="hidden" />
+          </label>
+        </div>
+
+        <div>
+          <label data-i18n="descLabel" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">აღწერა (Description)</label>
+          <textarea id="descInput" data-i18n-ph="phDesc" placeholder="მოკლე ინფორმაცია პროექტისა და ტოკენის შესახებ..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-slate-900 h-24 resize-none outline-none"></textarea>
+        </div>
+
+        <div class="pt-2 border-t border-slate-100">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <p data-i18n="socialsLabel" class="text-xs font-bold uppercase tracking-wider text-slate-500">სოციალური ბმულები (Solscan, Birdeye, Photon, GMGN მეტადატისთვის)</p>
+            <button type="button" onclick="window.fillOfficialSocials()" data-i18n="fillOfficialBtn" class="text-[11px] font-bold text-indigo-600 hover:underline cursor-pointer">⚡ ჩასვი GUJIX-ის ოფიციალური ლინკები</button>
+          </div>
+          <div class="grid sm:grid-cols-3 gap-3">
+            <input id="twitterInput" value="https://x.com/gujitokens" oninput="window.updatePreview()" placeholder="𝕏 https://x.com/gujitokens" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs outline-none" />
+            <input id="telegramInput" value="https://t.me/gujitokens000" oninput="window.updatePreview()" placeholder="✈️ https://t.me/gujitokens000" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs outline-none" />
+            <input id="websiteInput" value="https://gujitokens.online" oninput="window.updatePreview()" placeholder="🌐 https://gujitokens.online" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs outline-none" />
+          </div>
+        </div>
+
+        <button id="submitBtn" type="submit" class="w-full rounded-2xl bg-slate-900 hover:bg-indigo-600 text-white font-bold py-4 px-6 shadow-xl transition-all cursor-pointer">
+          ✨ ტოკენის შექმნა & Revoke (0.09 SOL)
+        </button>
+
+        <div id="statusBox" class="hidden p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center text-sm font-semibold text-slate-700 break-words"></div>
+
+        <div id="successBox" class="hidden p-5 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
+          <div id="successHeader" data-i18n="successHeader" class="text-emerald-700 font-bold text-sm">✅ ტოკენი წარმატებით შეიქმნა!</div>
+          <p class="text-xs text-slate-500">Contract Address (Mint):</p>
+          <p id="mintAddrText" class="font-mono text-xs sm:text-sm font-bold text-slate-900 bg-white p-3 rounded-xl border border-emerald-200 break-all"></p>
+          <div class="flex flex-wrap gap-3 pt-2">
+            <a id="solscanTokenLink" href="#" target="_blank" data-i18n="viewOnSolscan" class="text-xs font-bold text-indigo-600 underline">ნახე ტოკენი Solscan-ზე ↗</a>
+            <a id="solscanTxLink" href="#" target="_blank" data-i18n="viewTx" class="text-xs font-bold text-emerald-700 underline">ნახე ტრანზაქცია ↗</a>
+            <button type="button" onclick="window.sendMintToBooster()" data-i18n="sendToBoosterBtn" class="text-xs font-extrabold bg-indigo-600 text-white px-3 py-1.5 rounded-lg cursor-pointer">
+              🤖 გადაიტანე Bot Booster-ში →
+            </button>
+            <button type="button" onclick="window.openInstantTokenSite()" data-i18n="openTokenSiteBtn" class="text-xs font-extrabold bg-emerald-600 text-white px-3 py-1.5 rounded-lg cursor-pointer">
+              🌐 გახსენი ტოკენის ვებსაიტი ↗
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div class="lg:col-span-5 space-y-6">
+        <div class="bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <span data-i18n="previewTitle" class="text-xs font-bold uppercase tracking-wider text-slate-400">Live Token Preview</span>
+            <span id="networkBadgePreview" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-600 border border-indigo-200">MAINNET</span>
+          </div>
+
+          <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+            <div class="h-16 w-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center overflow-hidden shadow-sm shrink-0">
+              <span id="logoFallback" class="text-2xl font-black text-slate-300">GJ</span>
+              <img id="logoImg" class="hidden h-full w-full object-cover" />
+            </div>
+            <div class="min-w-0 flex-1">
+              <h3 id="prevName" class="text-lg font-extrabold text-slate-900 truncate">Token Name</h3>
+              <p id="prevSymbol" class="text-sm font-bold text-indigo-600">$TICKER</p>
+              <p id="prevSupply" class="text-xs text-slate-400 mt-0.5">Supply: 1,000,000,000</p>
+              <div class="flex items-center gap-2 mt-2">
+                <span class="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 text-[10px] font-bold">🌐 Web</span>
+                <span class="px-2 py-0.5 rounded bg-sky-50 text-sky-700 text-[10px] font-bold">𝕏 Twitter</span>
+                <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-bold">✈️ Telegram</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 space-y-2.5">
+            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-slate-100">
+              <div>
+                <p class="text-xs font-bold text-slate-800">🛡️ Revoke Mint Authority</p>
+                <p data-i18n="secMintSub" class="text-[11px] text-slate-400">ახალი ტოკენების დაბეჭდვა შეუძლებელია</p>
+              </div>
+              <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Active</span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-slate-100">
+              <div>
+                <p class="text-xs font-bold text-slate-800">🛡️ Revoke Freeze Authority</p>
+                <p data-i18n="secFreezeSub" class="text-[11px] text-slate-400">საფულეების დაბლოკვა შეუძლებელია</p>
+              </div>
+              <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Active</span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-slate-100">
+              <div>
+                <p class="text-xs font-bold text-slate-800">🛡️ Immutable Metadata + Socials</p>
+                <p data-i18n="secMetaSub" class="text-[11px] text-slate-400">სრული Metaplex + Extensions სტანდარტი</p>
+              </div>
+              <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Active</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+              <p data-i18n="priceLabel" class="text-xs font-bold uppercase tracking-wider text-slate-400">სერვისის ღირებულება</p>
+              <p data-i18n="priceSub" class="text-sm font-medium text-slate-600 mt-0.5">ყველა ხარჯი გაერთიანებულია</p>
+            </div>
+            <div class="text-right" id="priceDisplay">
+              <span class="text-2xl font-black text-slate-900">0.09 SOL</span>
+              <p class="text-[11px] text-slate-400">All-inclusive</p>
+            </div>
+          </div>
+          <p id="priceNote" class="pt-4 text-xs text-slate-500">
+            🔒 საფასური მოიცავს ტოკენის შექმნას, IPFS ჰოსტინგს და Mint/Freeze Revoke ოპერაციებს და უცვლელ Metadata-ს.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- OFFICIAL FOOTER -->
+  <footer class="relative z-20 bg-white/90 border-t border-slate-200/80 py-8 px-4 sm:px-6 mt-12">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="flex items-center gap-2 font-bold text-slate-800">
+        <span class="h-6 w-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black">G</span>
+        <span>GUJIX Token Studio — <a href="https://gujitokens.online" target="_blank" class="text-indigo-600 underline">https://gujitokens.online</a></span>
+      </div>
+      <div class="flex flex-wrap items-center gap-5 font-bold">
+        <a href="https://gujitokens.online" target="_blank" class="text-slate-700 hover:text-indigo-600 transition">🌐 Official Website</a>
+        <a href="https://x.com/gujitokens" target="_blank" class="text-slate-700 hover:text-indigo-600 transition">𝕏 Twitter (@gujitokens)</a>
+        <a href="https://t.me/gujitokens000" target="_blank" class="text-slate-700 hover:text-indigo-600 transition">✈️ Telegram (t.me/gujitokens000)</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 3. STANDALONE WALLET CONNECTOR & APP LOGIC -->
+  <script>
+    const ADMIN_WALLET = "PKu7aRDnBW3pvzKQcE3eYZAgg8rDxgQSWsBksAg58D8";
+    const OFFICIAL_WEBSITE = "https://gujitokens.online";
+    const OFFICIAL_TWITTER = "https://x.com/gujitokens";
+    const OFFICIAL_TELEGRAM = "https://t.me/gujitokens000";
+
+    // Public RPC endpoints. For production traffic, configure a server-side RPC proxy.
+    const RPC_ENDPOINTS = {
+      mainnet: "https://api.mainnet-beta.solana.com",
+      devnet: "https://api.devnet.solana.com"
+    };
+    const SERVICE_FEE_SOL = 0.09;
+    const BOT_SERVICE_FEE_SOL = 0.1;
+    const PRO_TOOL_FEE_SOL = 0.05;
+    const REFERRAL_REWARD_SOL = 0.02;
+    const WSOL_MINT = "So11111111111111111111111111111111111111112";
+    const MINT_SIZE = 82;
+
+    const TOKEN_PROGRAM_STR = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+    const ASSOC_TOKEN_PROGRAM_STR = "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
+    const METADATA_PROGRAM_STR = "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s";
+    const SYSVAR_RENT_STR = "SysvarRent111111111111111111111111111111111";
+
+    let connectedPubkey = null;
+    let currentLang = "ka";
+    let currentNetwork = "mainnet";
+    let botWallets = [];
+    let autoLoopTimer = null;
+    let customVanityKeypair = null;
+    let referrerWallet = null;
+
+    // Phantom provider detection.
+    // IMPORTANT: call provider.connect() directly inside the click handler.
+    // Awaiting a polling loop first can consume the browser's user activation
+    // and cause Phantom's connection popup to be blocked.
+    function getSolanaProvider() {
+      try {
+        const candidates = [
+          window.phantom && window.phantom.solana,
+          window.solana,
+          window.phantom && window.phantom.ethereum
+        ];
+        for (const candidate of candidates) {
+          if (candidate && candidate.isPhantom && typeof candidate.connect === "function") {
+            return candidate;
+          }
+        }
+      } catch (error) {
+        console.warn("Phantom provider detection error:", error);
+      }
+      return null;
+    }
+
+    function setWalletButtonsText(shortAddr) {
+      const btn = document.getElementById("walletBtn");
+      const btnMob = document.getElementById("walletBtnMobile");
+      if (btn) {
+        btn.innerText = shortAddr;
+        btn.className = "bg-slate-900 text-white font-bold text-sm px-4 py-2.5 rounded-xl shadow-sm cursor-pointer";
+      }
+      if (btnMob) {
+        btnMob.innerText = shortAddr;
+        btnMob.className = "bg-slate-900 text-white font-bold text-xs px-3.5 py-2 rounded-xl shadow-sm cursor-pointer";
+      }
+    }
+
+    window.connectWallet = async function() {
+      if (window.location.protocol !== "https:" &&
+          window.location.hostname !== "localhost" &&
+          window.location.hostname !== "127.0.0.1") {
+        alert("Phantom-ის დასაკავშირებლად საიტი HTTPS-ზე უნდა იყოს. გახსენით https:// ვერსია.");
+        window.location.href = "https://" + window.location.host + window.location.pathname + window.location.search + window.location.hash;
+        return;
+      }
+
+      const provider = getSolanaProvider();
+
+      if (!provider) {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          const currentUrl = encodeURIComponent(window.location.href);
+          const refUrl = encodeURIComponent(window.location.origin);
+          window.location.href = "https://phantom.app/ul/browse/" + currentUrl + "?ref=" + refUrl;
+          return;
+        }
+
+        const inFrame = window.self !== window.top;
+        const message = inFrame
+          ? "გვერდი გახსნილია iframe-ში. გახსენით https://gujitokens.online პირდაპირ ახალ ტაბში."
+          : "Phantom Extension ვერ მოიძებნა ამ ბრაუზერის გვერდზე. დარწმუნდით, რომ Phantom Extension ჩართულია, საიტი გახსნილია Chrome/Brave/Firefox-ში და შემდეგ განაახლეთ გვერდი.";
+        alert("Phantom Wallet ვერ მოიძებნა.\n\n" + message);
+        return;
+      }
+
+      try {
+        // This call happens immediately from the button click (no await beforehand).
+        const response = await provider.connect();
+        const publicKey = response && response.publicKey ? response.publicKey : provider.publicKey;
+        if (!publicKey) {
+          throw new Error("Phantom-მა public key არ დააბრუნა. გათიშეთ და ხელახლა სცადეთ.");
+        }
+
+        connectedPubkey = publicKey.toString();
+        setWalletButtonsText(connectedPubkey.slice(0, 4) + ".." + connectedPubkey.slice(-4));
+
+        const refInput = document.getElementById("myRefLinkInput");
+        if (refInput) refInput.value = OFFICIAL_WEBSITE + "/?ref=" + connectedPubkey;
+
+        if (typeof window.updateAdminUI === "function") window.updateAdminUI();
+        if (typeof window.reportWalletToBackend === "function") {
+          try {
+            await window.reportWalletToBackend(connectedPubkey, "connect");
+          } catch (backendError) {
+            // Wallet connection must remain successful even if analytics/backend is unavailable.
+            console.warn("Wallet connected; backend reporting failed:", backendError);
+          }
+        }
+      } catch (error) {
+        console.error("Phantom connect error:", error);
+        if (error && (error.code === 4001 || error.name === "WalletConnectionError")) {
+          alert("Phantom-ში დაკავშირება უარყავით. დაადასტურეთ მოთხოვნა საფულეში და სცადეთ თავიდან.");
+        } else {
+          alert("Phantom-თან დაკავშირება ვერ მოხერხდა: " + (error && error.message ? error.message : String(error)));
+        }
+      }
+    };
+
+    const dict = {
+      ka: {
+        topBarTitle: "GUJIX Solana Token Studio & Web3 ეკოსისტემა",
+        navLauncher: "🚀 Token Launcher",
+        navBooster: "🤖 Bot Booster (10)",
+        navTools: "🧰 Pro Tools",
+        selectWallet: "საფულის არჩევა",
+        devnetBanner: "🧪 ჩართულია DEVNET (სატესტო რეჟიმი). ყველა ხელსაწყო, ტოკენის შექმნა და ბოტები მუშაობს უფასო სატესტო SOL-ით!",
+        badge: "Solana SPL Token Launcher — gujitokens.online",
+        hero1: "შექმენი შენი ტოკენი",
+        hero2: " 1 კლიკით",
+        heroSub: "მომენტალური დეპლოი Solana-ზე, სრული IPFS მეტადატა (Twitter, Telegram, Website) და Mint და Freeze უფლებების გაუქმება და Metadata-ის უცვლელად შექმნა.",
+        pinataLabel: "🔑 Pinata JWT API Key (IPFS-ზე ლოგოს და მეტადატის ასატვირთად) *",
+        pinataLink: "აიღე უფასოდ Pinata-ზე →",
+        phPinata: "ჩასვი შენი Pinata JWT კოდი (იწყება eyJ...)",
+        nameLabel: "ტოკენის სახელი *",
+        phName: "მაგ: Gujix Protocol",
+        symbolLabel: "სიმბოლო (Ticker) *",
+        phSymbol: "მაგ: GUJIX",
+        supplyLabel: "მთლიანი რაოდენობა (Supply) *",
+        decimalsLabel: "Decimals *",
+        vanityTitle: "🎯 Custom Vanity Mint Address (VIP ფუნქცია)",
+        vanitySub: "შექმენი ლამაზი კონტრაქტის მისამართი სასურველი საწყისი ასოებით (1-3 სიმბოლო)",
+        phVanity: "მაგ: GJ ან SOL",
+        vanityFindBtn: "🔍 პოვნა",
+        vanityResetBtn: "გასუფთავება",
+        logoLabel: "ტოკენის ლოგო (PNG, JPG, GIF) *",
+        logoUploadText: "დააჭირე ლოგოს ასატვირთად",
+        logoUploadHint: "რეკომენდებულია 500x500px კვადრატული სურათი",
+        descLabel: "აღწერა (Description)",
+        phDesc: "მოკლე ინფორმაცია პროექტისა და ტოკენის შესახებ...",
+        socialsLabel: "სოციალური ბმულები (Solscan, Birdeye, Photon, GMGN მეტადატისთვის)",
+        fillOfficialBtn: "⚡ ჩასვი GUJIX-ის ოფიციალური ლინკები",
+        btnAdmin: "👑 ტოკენის შექმნა (Admin — 0 SOL Fee)",
+        btnUser: "✨ ტოკენის შექმნა & Revoke (0.09 SOL)",
+        btnDevnet: "🧪 ტოკენის შექმნა DEVNET-ზე (სატესტო — 0 SOL)",
+        adminNote: "🔒 ადმინისტრატორის საფულე ამოცნობილია! თქვენთვის ყველა ხელსაწყო, ტოკენის შექმნა და ბოტები უფასოა (0 SOL).",
+        userNote: "🔒 საფასური მოიცავს ტოკენის შექმნას, IPFS ჰოსტინგს და Mint/Freeze Revoke ოპერაციებს და უცვლელ Metadata-ს.",
+        devnetNote: "🧪 ჩართულია სატესტო რეჟიმი (Devnet). ტოკენი იქმნება უფასო სატესტო SOL-ით.",
+        previewTitle: "ტოკენის ლაივ გადახედვა",
+        secMintSub: "ახალი ტოკენების დაბეჭდვა შეუძლებელია",
+        secFreezeSub: "საფულეების დაბლოკვა შეუძლებელია",
+        secMetaSub: "სრული Metaplex + Extensions სტანდარტი",
+        priceLabel: "სერვისის ღირებულება",
+        priceSub: "ყველა ხარჯი გაერთიანებულია",
+        successHeader: "✅ ტოკენი წარმატებით შეიქმნა!",
+        viewOnSolscan: "ნახე ტოკენი Solscan-ზე ↗",
+        viewTx: "ნახე ტრანზაქცია ↗",
+        sendToBoosterBtn: "🤖 გადაიტანე Bot Booster-ში →",
+        openTokenSiteBtn: "🌐 გახსენი ტოკენის ვებსაიტი ↗",
+        botBadge: "GUJIX Multi-Wallet Volume & Maker Booster",
+        botHero1: "ტოკენის ბუსტერი & ",
+        botHero2: "10 ბოტ-საფულის მართვა",
+        botHeroSub: "შექმენი 1-დან 10-მდე რენდომ საფულე, გადაანაწილე SOL ერთი ტრანზაქციით და მართე ყიდვა-გაყიდვა (სხვებისთვის: 0.1 SOL | ადმინისთვის: უფასო).",
+        botStep1Title: "1. ბოტების გენერაცია & შევსება",
+        botStep1Sub: "თითოეულ ბოტს ექნება საკუთარი უნიკალური მისამართი",
+        botCountLabel: "ბოტების რაოდენობა (1 - 10)",
+        botGenBtn: "🎲 შექმნა",
+        botSolPerLabel: "SOL თითო ბოტზე",
+        botFundBtn: "💸 შევსება",
+        btnRefresh: "🔄 განახლება",
+        botExportBtn: "🔑 გასაღებების შენახვა",
+        botCollectBtn: "📥 ყველა SOL-ის დაბრუნება",
+        botStep2Title: "2. ტოკენის ყიდვა / გაყიდვა (Swap პანელი)",
+        botStep2Sub: "Wallet funding and balance management; trading automation disabled",
+        botTargetLabel: "Target Token Mint (ან DexScreener ლინკი) *",
+        phTargetMint: "ჩასვი ტოკენის მისამართი ან DexScreener ლინკი...",
+        botBuyAmtLabel: "ყიდვის მოცულობა (SOL)",
+        botBuyAllBtn: "🟢 ყველა ბოტით ყიდვა",
+        botSellAllBtn: "🔴 ყველას გაყიდვა (100%)",
+        botAutoStartBtn: "🔄 Auto-Boost ჩართვა",
+        botAutoStopBtn: "⏹ Auto-Boost გაჩერება",
+        botReadyStatus: "მზადაა: შექმენი ბოტ-საფულეები და გადაანაწილე SOL.",
+        botTableTitle: "📊 ბოტ-საფულეების სამართავი დაშბორდი",
+        thBotPub: "Public Address (პირადი მისამართი)",
+        thSolBal: "SOL ბალანსი",
+        thTokBal: "Token ბალანსი",
+        thStatus: "სტატუსი",
+        thBotCtrl: "ინდივიდუალური მართვა",
+        botEmptyRow: "დააჭირე '🎲 შექმნა'-ს ბოტების დასაგენერირებლად",
+        toolsBadge: "GUJIX Solana Pro Ecosystem Tools",
+        toolsHero1: "პროფესიონალური ",
+        toolsHero2: "Solana ხელსაწყოები",
+        toolsHeroSub: "ყველაფერი ერთ სივრცეში: LP/Token Burner, Multisender Airdrop, 1-Click Website Builder, Anti-Rug სკანერი და რეფერალური სისტემა.",
+        tool1Title: "🔥 1. Token & LP Burner (დაწვა)",
+        tool1Sub: "დაწვი ტოკენების ან LP-ის ნაწილი მწვანე ბოქლომისთვის",
+        phBurnMint: "Token ან LP Mint მისამართი (ან DexScreener ლინკი)...",
+        phBurnAmt: "რაოდენობა (მაგ: 1000000)",
+        tool1Btn: "🔥 ტოკენების სამუდამოდ დაწვა",
+        tool2Title: "🪂 2. Multisender / Airdrop Tool",
+        tool2Sub: "გადაუგზავნე SOL ბევრ საფულეს 1 კლიკით",
+        phAirdropMint: "Token Mint (დატოვე ცარიელი თუ SOL-ს აგზავნი)",
+        phMultisendList: "თითო ხაზზე: საფულის_მისამართი,რაოდენობა (მაგ: PKu7aRDnBW3pvzKQcE3eYZAgg8rDxgQSWsBksAg58D8,0.01)",
+        tool2Btn: "🪂 მასიური გადაგზავნა (1 კლიკით)",
+        tool3Title: "🌐 3. 1-Click Token Website Builder",
+        tool3Sub: "შექმენი მზა Landing Page ჩარტით და Jupiter ყიდვის ღილაკით",
+        phSiteName: "ტოკენის სახელი (მაგ: GUJIX)",
+        phSiteSym: "სიმბოლო (მაგ: GJX)",
+        phSiteMint: "Token Mint ან DexScreener ლინკი *",
+        phSiteDesc: "მოკლე აღწერა საიტისთვის...",
+        tool3BtnPreview: "🌐 გახსენი Live საიტი ↗",
+        tool3BtnDownload: "📥 გადმოწერე HTML",
+        tool4Title: "🕵️ 4. Anti-Rug Security Scanner (+ DexScreener)",
+        tool4Sub: "მუშაობს ნებისმიერ ახალ ტოკენზე, Pair მისამართზე ან ლინკზე",
+        phScanMint: "ჩასვი ტოკენის/Pair მისამართი ან DexScreener ლინკი...",
+        tool4Btn: "🔍 შემოწმება",
+        tool4Ready: "ჩაწერე ნებისმიერი ახალი ტოკენის მისამართი (თუნდაც პატარა ასოებით DexScreener-იდან) და დააჭირე შემოწმებას.",
+        refBadge: "🤝 რეფერალური ქეშბექ სისტემა",
+        refTitle: "მოიწვიე მეგობრები და მიიღე 0.02 SOL მომენტალურად!",
+        refSub: "როცა ვინმე შენი რეფერალური ლინკით შექმნის ტოკენს (0.09 SOL), სმარტ-ტრანზაქცია ავტომატურად ჩაგირიცხავს 0.02 SOL-ს პირდაპირ შენს საფულეზე!",
+        refLabel: "შენი პერსონალური რეფერალური ლინკი:",
+        btnCopyLink: "დაკოპირება",
+        adminTitle: "დაკავშირებული საფულეების დაშბორდი",
+        btnClear: "🗑️ გასუფთავება",
+        btnBack: "← უკან",
+        adminStatWallets: "უნიკალური საფულეები",
+        adminStatBalance: "ჯამური ბალანსი (SOL)",
+        adminStatMints: "შექმნილი ტოკენები",
+        adminStatFees: "ტარიფები (Launch/Bot/Tools)",
+        thBalance: "ბალანსი",
+        thNetwork: "ქსელი",
+        thTokens: "ტოკენები",
+        thVisits: "შემოსვლები",
+        thLastSeen: "ბოლო აქტივობა",
+        thAction: "მოქმედება"
+      },
+      en: {
+        topBarTitle: "GUJIX Solana Token Studio & Web3 Ecosystem",
+        navLauncher: "🚀 Token Launcher",
+        navBooster: "🤖 Bot Booster (10)",
+        navTools: "🧰 Pro Tools",
+        selectWallet: "Select Wallet",
+        devnetBanner: "🧪 DEVNET (Test Mode) is active. All tools, token minting, and bots work with free test SOL!",
+        badge: "Solana SPL Token Launcher — gujitokens.online",
+        hero1: "Create Your Token in",
+        hero2: " 1 Click",
+        heroSub: "Instant deployment on Solana, full IPFS metadata (Twitter, Telegram, Website), and Mint and Freeze authority revocation, with immutable metadata.",
+        pinataLabel: "🔑 Pinata JWT API Key (To upload logo & metadata to IPFS) *",
+        pinataLink: "Get free key on Pinata →",
+        phPinata: "Paste your Pinata JWT token (starts with eyJ...)",
+        nameLabel: "Token Name *",
+        phName: "e.g. Gujix Protocol",
+        symbolLabel: "Symbol (Ticker) *",
+        phSymbol: "e.g. GUJIX",
+        supplyLabel: "Total Supply *",
+        decimalsLabel: "Decimals *",
+        vanityTitle: "🎯 Custom Vanity Mint Address (VIP Feature)",
+        vanitySub: "Generate a custom contract address starting with your chosen characters (1-3 chars)",
+        phVanity: "e.g. GJ or SOL",
+        vanityFindBtn: "🔍 Find Address",
+        vanityResetBtn: "Reset",
+        logoLabel: "Token Logo (PNG, JPG, GIF) *",
+        logoUploadText: "Click to upload token logo",
+        logoUploadHint: "Recommended: 500x500px square image",
+        descLabel: "Description",
+        phDesc: "Short description about your project and token...",
+        socialsLabel: "Social Links (For Solscan, Birdeye, Photon, GMGN Metadata)",
+        fillOfficialBtn: "⚡ Fill Official GUJIX Links",
+        btnAdmin: "👑 Create Token (Admin — 0 SOL Fee)",
+        btnUser: "✨ Create Token & Revoke (0.09 SOL)",
+        btnDevnet: "🧪 Create Token on DEVNET (Test Mode — 0 SOL)",
+        adminNote: "🔒 Administrator wallet detected! All tools, Token Launch and Bot Booster are 0 SOL for you.",
+        userNote: "🔒 Includes token creation, permanent IPFS metadata hosting, and Mint/Freeze authority revocation and immutable metadata.",
+        devnetNote: "🧪 Test Mode (Devnet) is active. Tokens are deployed using free test SOL.",
+        previewTitle: "Live Token Preview",
+        secMintSub: "Impossible to mint more tokens",
+        secFreezeSub: "Impossible to freeze holder wallets",
+        secMetaSub: "Full Metaplex + Extensions standard",
+        priceLabel: "Service Pricing",
+        priceSub: "All-in-one bundle (Mint + Revoke + IPFS)",
+        successHeader: "✅ Token Created Successfully!",
+        viewOnSolscan: "View Token on Solscan ↗",
+        viewTx: "View Transaction ↗",
+        sendToBoosterBtn: "🤖 Send to Bot Booster →",
+        openTokenSiteBtn: "🌐 Open Token Website ↗",
+        botBadge: "GUJIX Multi-Wallet Volume & Maker Booster",
+        botHero1: "Token Volume Booster & ",
+        botHero2: "10 Bot-Wallet Manager",
+        botHeroSub: "Generate 1 to 10 random wallets, distribute SOL in one transaction, and manage Buy/Sell volume (Users: 0.1 SOL | Admin: Free).",
+        botStep1Title: "1. Generate & Fund Bot Wallets",
+        botStep1Sub: "Each bot gets its own unique Solana address",
+        botCountLabel: "Number of Bots (1 - 10)",
+        botGenBtn: "🎲 Generate",
+        botSolPerLabel: "SOL Per Bot",
+        botFundBtn: "💸 Fund Bots",
+        btnRefresh: "🔄 Refresh",
+        botExportBtn: "🔑 Export Keys",
+        botCollectBtn: "📥 Collect All SOL Back",
+        botStep2Title: "2. Token Buy / Sell (Swap Panel)",
+        botStep2Sub: "Wallet funding and balance management; trading automation disabled",
+        botTargetLabel: "Target Token Mint (or DexScreener Link) *",
+        phTargetMint: "Paste token mint address or DexScreener link...",
+        botBuyAmtLabel: "Buy Amount (SOL)",
+        botBuyAllBtn: "🟢 Buy All Bots",
+        botSellAllBtn: "🔴 Sell All (100%)",
+        botAutoStartBtn: "🔄 Start Auto-Boost",
+        botAutoStopBtn: "⏹ Stop Auto-Boost",
+        botReadyStatus: "Ready: Generate bot wallets and distribute SOL.",
+        botTableTitle: "📊 Bot-Wallets Management Dashboard",
+        thBotPub: "Public Address",
+        thSolBal: "SOL Balance",
+        thTokBal: "Token Balance",
+        thStatus: "Status",
+        thBotCtrl: "Individual Control",
+        botEmptyRow: "Click '🎲 Generate' to create bot wallets",
+        toolsBadge: "GUJIX Solana Pro Ecosystem Tools",
+        toolsHero1: "Professional ",
+        toolsHero2: "Solana Web3 Tools",
+        toolsHeroSub: "All-in-one hub: LP/Token Burner, Multisender Airdrop, 1-Click Website Builder, Anti-Rug Scanner, and Referral System.",
+        tool1Title: "🔥 1. Token & LP Burner",
+        tool1Sub: "Burn tokens or LP tokens permanently to get the green lock",
+        phBurnMint: "Token or LP Mint Address (or DexScreener link)...",
+        phBurnAmt: "Amount to burn (e.g. 1000000)",
+        tool1Btn: "🔥 Burn Tokens Permanently",
+        tool2Title: "🪂 2. Multisender / Airdrop Tool",
+        tool2Sub: "Send SOL to multiple wallets in 1 click",
+        phAirdropMint: "Token Mint (leave empty if sending SOL)",
+        phMultisendList: "One per line: wallet_address,amount (e.g. PKu7aRDnBW3pvzKQcE3eYZAgg8rDxgQSWsBksAg58D8,0.01)",
+        tool2Btn: "🪂 Send Multi-Airdrop (1 Click)",
+        tool3Title: "🌐 3. 1-Click Token Website Builder",
+        tool3Sub: "Generate a ready Landing Page with live chart & Jupiter buy button",
+        phSiteName: "Token Name (e.g. GUJIX)",
+        phSiteSym: "Symbol (e.g. GJX)",
+        phSiteMint: "Token Mint or DexScreener Link *",
+        phSiteDesc: "Short description for the website...",
+        tool3BtnPreview: "🌐 Open Live Site ↗",
+        tool3BtnDownload: "📥 Download HTML",
+        tool4Title: "🕵️ 4. Anti-Rug Security Scanner (+ DexScreener)",
+        tool4Sub: "Works on any new token, Pair address, or DexScreener link",
+        phScanMint: "Paste token/Pair address or DexScreener link...",
+        tool4Btn: "🔍 Scan",
+        tool4Ready: "Paste any new token address or DexScreener link and click Scan.",
+        refBadge: "🤝 Referral Cashback System",
+        refTitle: "Invite Friends & Earn 0.02 SOL Instantly!",
+        refSub: "Whenever someone creates a token (0.09 SOL) using your referral link, the smart transaction automatically sends 0.02 SOL directly to your wallet!",
+        refLabel: "Your Personal Referral Link:",
+        btnCopyLink: "Copy Link",
+        adminTitle: "Connected Wallets Dashboard",
+        btnClear: "🗑️ Clear List",
+        btnBack: "← Back",
+        adminStatWallets: "Unique Wallets",
+        adminStatBalance: "Total Balance (SOL)",
+        adminStatMints: "Tokens Minted",
+        adminStatFees: "Fees (Launch/Bot/Tools)",
+        thBalance: "Balance",
+        thNetwork: "Network",
+        thTokens: "Tokens",
+        thVisits: "Visits",
+        thLastSeen: "Last Seen",
+        thAction: "Action"
+      },
+      ru: {
+        topBarTitle: "GUJIX Solana Token Studio & Web3 Экосистема",
+        navLauncher: "🚀 Создание Токена",
+        navBooster: "🤖 Бот Бустер (10)",
+        navTools: "🧰 Pro Инструменты",
+        selectWallet: "Подключить кошелек",
+        devnetBanner: "🧪 Включен DEVNET (Тестовый режим). Все инструменты, создание токенов и боты работают за бесплатные тестовые SOL!",
+        badge: "Запуск SPL токенов на Solana — gujitokens.online",
+        hero1: "Создайте свой токен в",
+        hero2: " 1 клик",
+        heroSub: "Мгновенный деплой в Solana, полные метаданные IPFS (Twitter, Telegram, Website) и автоматический отзыв всех 3 прав (Mint, Freeze, Metadata).",
+        pinataLabel: "🔑 Pinata JWT API Ключ (Для загрузки логотипа в IPFS) *",
+        pinataLink: "Получить бесплатно на Pinata →",
+        phPinata: "Вставьте ваш Pinata JWT ключ (начинается с eyJ...)",
+        nameLabel: "Название токена *",
+        phName: "Напр: Gujix Protocol",
+        symbolLabel: "Символ (Тикер) *",
+        phSymbol: "Напр: GUJIX",
+        supplyLabel: "Общее количество (Supply) *",
+        decimalsLabel: "Decimals (Знаки) *",
+        vanityTitle: "🎯 Custom Vanity Mint Адрес (VIP функция)",
+        vanitySub: "Сгенерируйте красивый адрес контракта с выбранными первыми символами (1-3 символа)",
+        phVanity: "Напр: GJ или SOL",
+        vanityFindBtn: "🔍 Найти адрес",
+        vanityResetBtn: "Сброс",
+        logoLabel: "Логотип токена (PNG, JPG, GIF) *",
+        logoUploadText: "Нажмите для загрузки логотипа",
+        logoUploadHint: "Рекомендуется квадратное изображение 500x500px",
+        descLabel: "Описание (Description)",
+        phDesc: "Краткая информация о вашем проекте и токене...",
+        socialsLabel: "Социальные сети (Для метаданных Solscan, Birdeye, Photon, GMGN)",
+        fillOfficialBtn: "⚡ Вставить официальные ссылки GUJIX",
+        btnAdmin: "👑 Создать токен (Админ — 0 SOL)",
+        btnUser: "✨ Создать токен & Revoke (0.09 SOL)",
+        btnDevnet: "🧪 Создать токен в DEVNET (Тест — 0 SOL)",
+        adminNote: "🔒 Распознан кошелек администратора! Все инструменты, создание токенов и боты бесплатны (0 SOL).",
+        userNote: "🔒 В стоимость входит создание токена, хостинг метаданных в IPFS и отключение всех 3 прав.",
+        devnetNote: "🧪 Включен тестовый режим (Devnet). Создание токена за бесплатные тестовые SOL.",
+        previewTitle: "Предпросмотр токена",
+        secMintSub: "Выпуск новых токенов невозможен",
+        secFreezeSub: "Блокировка кошельков невозможна",
+        secMetaSub: "Полный стандарт Metaplex + Extensions",
+        priceLabel: "Стоимость сервиса",
+        priceSub: "Все включено (Mint + Revoke + IPFS)",
+        successHeader: "✅ Токен успешно создан!",
+        viewOnSolscan: "Посмотреть на Solscan ↗",
+        viewTx: "Посмотреть транзакцию ↗",
+        sendToBoosterBtn: "🤖 Перейти в Бот Бустер →",
+        openTokenSiteBtn: "🌐 Открыть сайт токена ↗",
+        botBadge: "GUJIX Мульти-Кошельковый Бустер Объема",
+        botHero1: "Бустер объема & ",
+        botHero2: "Управление 10 ботами",
+        botHeroSub: "Создайте от 1 до 10 случайных кошельков, распределите SOL одной транзакцией и управляйте покупкой/продажей (Комиссия: 0.1 SOL | Админу: Бесплатно).",
+        botStep1Title: "1. Генерация и пополнение ботов",
+        botStep1Sub: "Каждый бот получает свой уникальный адрес Solana",
+        botCountLabel: "Количество ботов (1 - 10)",
+        botGenBtn: "🎲 Создать",
+        botSolPerLabel: "SOL на каждого бота",
+        botFundBtn: "💸 Пополнить",
+        btnRefresh: "🔄 Обновить",
+        botExportBtn: "🔑 Скачать ключи",
+        botCollectBtn: "📥 Вернуть все SOL назад",
+        botStep2Title: "2. Покупка / Продажа токена (Swap панель)",
+        botStep2Sub: "Mainnet: Jupiter V6 Swap | Devnet: Тестовый Swap",
+        botTargetLabel: "Адрес токена Mint (или ссылка DexScreener) *",
+        phTargetMint: "Вставьте адрес токена или ссылку DexScreener...",
+        botBuyAmtLabel: "Сумма покупки (SOL)",
+        botBuyAllBtn: "🟢 Купить всеми ботами",
+        botSellAllBtn: "🔴 Продать всё (100%)",
+        botAutoStartBtn: "🔄 Запустить Авто-Буст",
+        botAutoStopBtn: "⏹ Остановить Авто-Буст",
+        botReadyStatus: "Готово: Создайте бот-кошельки и распределите SOL.",
+        botTableTitle: "📊 Панель управления бот-кошельками",
+        thBotPub: "Публичный адрес",
+        thSolBal: "Баланс SOL",
+        thTokBal: "Баланс Токенов",
+        thStatus: "Статус",
+        thBotCtrl: "Управление",
+        botEmptyRow: "Нажмите '🎲 Создать' для генерации бот-кошельков",
+        toolsBadge: "GUJIX Профессиональные Инструменты Solana",
+        toolsHero1: "Профессиональные ",
+        toolsHero2: "Инструменты Solana",
+        toolsHeroSub: "Всё в одном месте: Сжигание LP/Токенов, Мультисендер Airdrop, Конструктор сайтов в 1 клик, Anti-Rug Сканер и Реферальная система.",
+        tool1Title: "🔥 1. Сжигание Токенов и LP (Burner)",
+        tool1Sub: "Сожгите часть токенов или LP навсегда для зеленого замка",
+        phBurnMint: "Адрес токена или LP (или ссылка DexScreener)...",
+        phBurnAmt: "Количество (напр: 1000000)",
+        tool1Btn: "🔥 Сжечь токены навсегда",
+        tool2Title: "🪂 2. Мультисендер / Airdrop",
+        tool2Sub: "Отправьте SOL на множество кошельков в 1 клик",
+        phAirdropMint: "Token Mint (оставьте пустым для отправки SOL)",
+        phMultisendList: "По одному на строке: адрес_кошелька,сумма (Напр: PKu7aRDnBW3pvzKQcE3eYZAgg8rDxgQSWsBksAg58D8,0.01)",
+        tool2Btn: "🪂 Отправить мульти-рассылку (1 клик)",
+        tool3Title: "🌐 3. Конструктор Сайта Токена в 1 клик",
+        tool3Sub: "Создайте готовый сайт с графиком DexScreener и кнопкой покупки Jupiter",
+        phSiteName: "Название токена (напр: GUJIX)",
+        phSiteSym: "Символ (напр: GJX)",
+        phSiteMint: "Token Mint или ссылка DexScreener *",
+        phSiteDesc: "Краткое описание для сайта...",
+        tool3BtnPreview: "🌐 Открыть Live сайт ↗",
+        tool3BtnDownload: "📥 Скачать HTML",
+        tool4Title: "🕵️ 4. Anti-Rug Сканер Безопасности (+ DexScreener)",
+        tool4Sub: "Работает с любым новым токеном, адресом пула (Pair) или ссылкой",
+        phScanMint: "Вставьте адрес токена/пула или ссылку DexScreener...",
+        tool4Btn: "🔍 Сканировать",
+        tool4Ready: "Вставьте адрес любого нового токена или ссылку DexScreener и нажмите Сканировать.",
+        refBadge: "🤝 Реферальная Кэшбэк Система",
+        refTitle: "Приглашайте друзей и получайте 0.02 SOL мгновенно!",
+        refSub: "Когда кто-то создает токен (0.09 SOL) по вашей ссылке, смарт-транзакция автоматически переводит 0.02 SOL прямо на ваш кошелек!",
+        refLabel: "Ваша персональная реферальная ссылка:",
+        btnCopyLink: "Копировать",
+        adminTitle: "Панель подключенных кошельков",
+        btnClear: "🗑️ Очистить",
+        btnBack: "← Назад",
+        adminStatWallets: "Уникальные кошельки",
+        adminStatBalance: "Общий баланс (SOL)",
+        adminStatMints: "Создано токенов",
+        adminStatFees: "Тарифы (Launch/Bot/Tools)",
+        thBalance: "Баланс",
+        thNetwork: "Сеть",
+        thTokens: "Токены",
+        thVisits: "Визиты",
+        thLastSeen: "Последняя активность",
+        thAction: "Действие"
+      }
+    };
+
+    window.fillOfficialSocials = function() {
+      document.getElementById("twitterInput").value = OFFICIAL_TWITTER;
+      document.getElementById("telegramInput").value = OFFICIAL_TELEGRAM;
+      document.getElementById("websiteInput").value = OFFICIAL_WEBSITE;
+    };
+
+    window.resolveSolanaMint = async function(rawInput) {
+      let clean = (rawInput || "").trim();
+      if (clean.includes("dexscreener.com/solana/")) {
+        clean = clean.split("dexscreener.com/solana/")[1].split("?")[0].split("/")[0].trim();
+      }
+      if (clean.includes("solscan.io/token/")) {
+        clean = clean.split("solscan.io/token/")[1].split("?")[0].split("/")[0].trim();
+      }
+      if (clean.includes("pump.fun/")) {
+        clean = clean.split("pump.fun/")[1].split("?")[0].split("/")[0].trim();
+      }
+      try {
+        const pairRes = await fetch("https://api.dexscreener.com/latest/dex/pairs/solana/" + clean);
+        if (pairRes.ok) {
+          const pairData = await pairRes.json();
+          if (pairData.pair && pairData.pair.baseToken && pairData.pair.baseToken.address) {
+            return { mint: pairData.pair.baseToken.address, dexInfo: pairData.pair };
+          }
+          if (pairData.pairs && pairData.pairs.length > 0) {
+            return { mint: pairData.pairs[0].baseToken.address, dexInfo: pairData.pairs[0] };
+          }
+        }
+        const tokRes = await fetch("https://api.dexscreener.com/latest/dex/tokens/" + clean);
+        if (tokRes.ok) {
+          const tokData = await tokRes.json();
+          if (tokData.pairs && tokData.pairs.length > 0) {
+            return { mint: tokData.pairs[0].baseToken.address, dexInfo: tokData.pairs[0] };
+          }
+        }
+        const searchRes = await fetch("https://api.dexscreener.com/latest/dex/search?q=" + clean);
+        if (searchRes.ok) {
+          const sData = await searchRes.json();
+          if (sData.pairs && sData.pairs.length > 0) {
+            return { mint: sData.pairs[0].baseToken.address, dexInfo: sData.pairs[0] };
+          }
+        }
+      } catch (e) {}
+      return { mint: clean, dexInfo: null };
+    };
+
+    const BS58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+    function toBase58(bytes) {
+      let digits = [0];
+      for (let i = 0; i < bytes.length; i++) {
+        let carry = bytes[i];
+        for (let j = 0; j < digits.length; j++) {
+          carry += digits[j] << 8;
+          digits[j] = carry % 58;
+          carry = (carry / 58) | 0;
+        }
+        while (carry > 0) {
+          digits.push(carry % 58);
+          carry = (carry / 58) | 0;
+        }
+      }
+      let str = "";
+      for (let k = 0; bytes[k] === 0 && k < bytes.length - 1; k++) str += "1";
+      for (let q = digits.length - 1; q >= 0; q--) str += BS58_ALPHABET[digits[q]];
+      return str;
+    }
+
+    window.switchView = function(view) {
+      ["launcher", "booster", "tools", "admin"].forEach(v => {
+        const el = document.getElementById("view-" + v);
+        if (el) el.classList.add("hidden");
+      });
+      const target = document.getElementById("view-" + view);
+      if (target) target.classList.remove("hidden");
+
+      ["launcher", "booster", "tools"].forEach(t => {
+        const tabEl = document.getElementById("tab-" + t);
+        if (tabEl) {
+          tabEl.className = (t === view)
+            ? "px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-extrabold bg-white text-indigo-600 shadow-sm transition-all cursor-pointer"
+            : "px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-extrabold text-slate-600 hover:text-slate-900 transition-all cursor-pointer";
+        }
+      });
+
+      if (view === "booster") window.refreshBotBalances();
+      if (view === "admin") window.loadAdminWallets();
+    };
+
+    window.setNetwork = function(net) {
+      if (net !== "mainnet" && net !== "devnet") {
+        console.error("Unsupported Solana network:", net);
+        return;
+      }
+      currentNetwork = net;
+      const mainBtn = document.getElementById("net-mainnet");
+      const devBtn = document.getElementById("net-devnet");
+      const banner = document.getElementById("devnetBanner");
+      const airdropBtn = document.getElementById("airdropBtn");
+      const netBadge = document.getElementById("networkBadgePreview");
+
+      if (net === "devnet") {
+        devBtn.className = "px-2 sm:px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold uppercase bg-amber-500 text-white shadow-sm cursor-pointer";
+        mainBtn.className = "px-2 sm:px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold uppercase text-slate-500 hover:text-slate-900 cursor-pointer";
+        banner.classList.remove("hidden");
+        if (airdropBtn) { airdropBtn.classList.remove("hidden"); airdropBtn.classList.add("inline-flex"); }
+        netBadge.innerText = "DEVNET (TEST)";
+        netBadge.className = "px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-300";
+      } else {
+        mainBtn.className = "px-2 sm:px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold uppercase bg-indigo-600 text-white shadow-sm cursor-pointer";
+        devBtn.className = "px-2 sm:px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold uppercase text-slate-500 hover:text-slate-900 cursor-pointer";
+        banner.classList.add("hidden");
+        if (airdropBtn) { airdropBtn.classList.add("hidden"); airdropBtn.classList.remove("inline-flex"); }
+        netBadge.innerText = "MAINNET";
+        netBadge.className = "px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-600 border border-indigo-200";
+      }
+      window.updateAdminUI();
+      window.refreshBotBalances();
+      if (connectedPubkey) window.reportWalletToBackend(connectedPubkey, "switch_net");
+    };
+
+    window.copyReferralLink = function() {
+      const val = document.getElementById("myRefLinkInput").value;
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(val).then(() => alert("✅ Copied!")).catch(() => alert("Clipboard access was denied. Please copy the link manually."));
+      } else {
+        const input = document.getElementById("myRefLinkInput");
+        input.select();
+        alert("Clipboard is unavailable. The referral link is selected; copy it manually.");
+      }
+    };
+
+    window.sendMintToBooster = function() {
+      const mint = document.getElementById("mintAddrText").innerText.trim();
+      if (mint) document.getElementById("targetMintInput").value = mint;
+      window.switchView("booster");
+    };
+
+    function buildTokenLandingHtml(mint, name, sym, desc, tw, tg) {
+      const finalName = name || "GUJIX Token";
+      const finalSym = sym || "GUJIX";
+      const finalDesc = desc || ("Official community token deployed on Solana Mainnet via " + OFFICIAL_WEBSITE);
+      const finalTw = tw || OFFICIAL_TWITTER;
+      const finalTg = tg || OFFICIAL_TELEGRAM;
+      const shortSym = finalSym.slice(0, 2);
+
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${finalName} ($${finalSym}) — Official Solana Token</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>body{font-family:'Inter',sans-serif;background:#0B0F19;color:#fff;}</style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+  <header class="max-w-6xl w-full mx-auto px-6 py-6 flex items-center justify-between border-b border-white/10">
+    <div class="flex items-center gap-3">
+      <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-sky-400 flex items-center justify-center font-black text-lg">$${shortSym}</div>
+      <span class="text-xl font-black">${finalName}</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="${OFFICIAL_WEBSITE}" target="_blank" class="text-xs font-bold text-slate-400 hover:text-white transition">🌐 gujitokens.online</a>
+      <a href="https://jup.ag/swap/SOL-${mint}" target="_blank" class="bg-indigo-600 hover:bg-indigo-500 px-5 py-2.5 rounded-xl text-sm font-bold transition">Buy on Jupiter ↗</a>
+    </div>
+  </header>
+  <main class="max-w-6xl w-full mx-auto px-6 py-16 space-y-12">
+    <div class="text-center max-w-3xl mx-auto space-y-5">
+      <span class="px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">🛡️ Mint & Freeze Authorities Revoked • Immutable Metadata</span>
+      <h1 class="text-5xl sm:text-6xl font-black tracking-tight">${finalName} <span class="text-indigo-400">($${finalSym})</span></h1>
+      <p class="text-slate-400 text-lg">${finalDesc}</p>
+      <div class="p-4 rounded-2xl bg-white/5 border border-white/10 max-w-xl mx-auto">
+        <p class="text-xs text-slate-400 uppercase font-bold mb-1">Contract Address (CA):</p>
+        <p class="font-mono text-xs sm:text-sm text-indigo-300 break-all">${mint}</p>
+      </div>
+      <div class="flex flex-wrap justify-center gap-4 pt-2">
+        <a href="https://raydium.io/swap/?inputMint=sol&outputMint=${mint}" target="_blank" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-sky-500 font-extrabold text-sm shadow-lg">🚀 Buy on Raydium</a>
+        <a href="https://solscan.io/token/${mint}" target="_blank" class="px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 font-bold text-sm">🔍 View on Solscan</a>
+        <a href="${finalTw}" target="_blank" class="px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 font-bold text-sm">𝕏 Twitter</a>
+        <a href="${finalTg}" target="_blank" class="px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 font-bold text-sm">✈️ Telegram</a>
+      </div>
+    </div>
+    <div class="rounded-3xl overflow-hidden border border-white/10 bg-black/40 h-[520px]">
+      <iframe src="https://dexscreener.com/solana/${mint}?embed=1&theme=dark" class="w-full h-full border-0"></iframe>
+    </div>
+  </main>
+  <footer class="border-t border-white/10 py-6 text-center text-xs text-slate-500">
+    Powered by <a href="${OFFICIAL_WEBSITE}" target="_blank" class="text-indigo-400 font-bold underline">gujitokens.online</a> • <a href="${OFFICIAL_TWITTER}" target="_blank" class="hover:text-white">𝕏 @gujitokens</a> • <a href="${OFFICIAL_TELEGRAM}" target="_blank" class="hover:text-white">✈️ t.me/gujitokens000</a>
+  </footer>
+</body>
+</html>`;
+    }
+
+    window.openInstantTokenSite = function() {
+      const mint = document.getElementById("mintAddrText").innerText.trim();
+      const name = document.getElementById("nameInput").value.trim();
+      const sym = document.getElementById("symbolInput").value.trim();
+      const desc = document.getElementById("descInput").value.trim();
+      const tw = document.getElementById("twitterInput").value.trim();
+      const tg = document.getElementById("telegramInput").value.trim();
+      const html = buildTokenLandingHtml(mint, name, sym, desc, tw, tg);
+      const blob = new Blob([html], { type: "text/html" });
+      window.open(URL.createObjectURL(blob), "_blank");
+    };
+
+    window.findVanityAddress = function() {
+      if (typeof solanaWeb3 === "undefined") { alert("Solana Web3 loading, please wait 2 seconds..."); return; }
+      const prefix = document.getElementById("vanityPrefixInput").value.trim();
+      if (!prefix) { alert("ჩაწერე 1-დან 3-მდე სიმბოლო (მაგ: GJ)"); return; }
+      const statusEl = document.getElementById("vanityStatusText");
+      statusEl.classList.remove("hidden");
+      statusEl.innerText = "⏳ Searching (" + prefix + "...)...";
+
+      setTimeout(() => {
+        let attempts = 0;
+        let found = null;
+        while (attempts < 45000) {
+          attempts++;
+          const kp = solanaWeb3.Keypair.generate();
+          const pub = kp.publicKey.toBase58();
+          if (pub.startsWith(prefix)) {
+            found = kp;
+            break;
+          }
+        }
+        if (found) {
+          customVanityKeypair = found;
+          statusEl.innerText = "✅ Found (" + attempts + " tries): " + found.publicKey.toBase58();
+        } else {
+          statusEl.innerText = "⚠️ Not found in 45,000 tries, click Find again or try 2 chars.";
+        }
+      }, 50);
+    };
+
+    window.clearVanityAddress = function() {
+      customVanityKeypair = null;
+      document.getElementById("vanityPrefixInput").value = "";
+      document.getElementById("vanityStatusText").classList.add("hidden");
+    };
+
+    // Private keys are intentionally kept in memory only; never write them to localStorage.
+    function saveBotsToStorage() {
+      window.renderBotTable();
+    }
+
+    function loadBotsFromStorage() {
+      botWallets = [];
+      window.renderBotTable();
+      try {
+        if (localStorage.getItem("gujix_bot_wallets")) {
+          setBotStatus("⚠️ ძველი ვერსიის ბოტ-გასაღებები შეიძლება ისევ ინახებოდეს localStorage-ში. გადაიტანეთ ისინი უსაფრთხო ადგილას და შემდეგ წაშალეთ ძველი მონაცემები.");
+        }
+      } catch (storageError) {
+        console.warn("Browser storage is unavailable.", storageError);
+      }
+    }
+
+    window.generateBotWallets = function() {
+      if (typeof solanaWeb3 === "undefined") { alert("Solana Web3 ბიბლიოთეკა იტვირთება, სცადე 2 წამში..."); return; }
+      const count = Math.min(10, Math.max(1, parseInt(document.getElementById("botCountInput").value || "5")));
+      if (botWallets.length > 0 && !confirm("ახალი საფულეების შექმნა ჩაანაცვლებს არსებულ ბოტ-საფულეებს. გავაგრძელოთ?")) return;
+      botWallets = [];
+      for (let i = 0; i < count; i++) {
+        const kp = solanaWeb3.Keypair.generate();
+        botWallets.push({ keypair: kp, pubkey: kp.publicKey.toBase58(), solBalance: "0.0000", tokenBalance: "0", rawTokenBalance: "0", status: "Ready" });
+      }
+      saveBotsToStorage();
+      window.renderBotTable();
+      setBotStatus("✅ წარმატებით შეიქმნა " + count + " ბოტ-საფულე!");
+    };
+
+    window.renderBotTable = function() {
+      const tbody = document.getElementById("botTableBody");
+      const badge = document.getElementById("activeBotsCountBadge");
+      if (badge) badge.innerText = botWallets.length + " Wallets Active";
+      if (!tbody) return;
+      if (botWallets.length === 0) {
+        const emptyTxt = dict[currentLang]?.botEmptyRow || "Click Generate";
+        tbody.innerHTML = `<tr><td colspan="6" class="py-10 text-center text-slate-400">${emptyTxt}</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = botWallets.map((b, i) => `
+        <tr class="hover:bg-slate-50/80 transition-colors">
+          <td class="py-3 px-4 font-black text-slate-700">🤖 Bot #${i + 1}</td>
+          <td class="py-3 px-4">
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-xs font-semibold text-slate-800">${b.pubkey}</span>
+              <button type="button" onclick="navigator.clipboard.writeText('${b.pubkey}')" class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer">Copy</button>
+            </div>
+          </td>
+          <td class="py-3 px-4 font-extrabold text-indigo-600">${b.solBalance} SOL</td>
+          <td class="py-3 px-4 font-bold text-emerald-600">${b.tokenBalance}</td>
+          <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700">${b.status}</span></td>
+          <td class="py-3 px-4 text-right">
+            <div class="inline-flex items-center gap-1.5">
+              <span class="text-xs text-slate-500">Wallet management only</span>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    };
+
+    function setBotStatus(msg) {
+      const el = document.getElementById("botStatusBox");
+      if (el) el.innerText = msg;
+    }
+
+    window.refreshBotBalances = async function() {
+      if (botWallets.length === 0 || typeof solanaWeb3 === "undefined") return;
+      let conn;
+      try {
+        conn = new solanaWeb3.Connection(RPC_ENDPOINTS[currentNetwork], "confirmed");
+      } catch (error) {
+        setBotStatus("❌ RPC connection error: " + error.message);
+        return;
+      }
+      let targetMint = document.getElementById("targetMintInput").value.trim();
+
+      if (targetMint && targetMint.length > 20) {
+        const res = await window.resolveSolanaMint(targetMint);
+        targetMint = res.mint;
+      }
+
+      for (let i = 0; i < botWallets.length; i++) {
+        try {
+          const bal = await conn.getBalance(botWallets[i].keypair.publicKey);
+          botWallets[i].solBalance = (bal / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4);
+
+          if (targetMint && targetMint.length > 30) {
+            const parsed = await conn.getParsedTokenAccountsByOwner(
+              botWallets[i].keypair.publicKey,
+              { mint: new solanaWeb3.PublicKey(targetMint) }
+            );
+            if (parsed.value.length > 0) {
+              const info = parsed.value[0].account.data.parsed.info.tokenAmount;
+              botWallets[i].tokenBalance = Number(info.uiAmount || 0).toLocaleString();
+              botWallets[i].rawTokenBalance = info.amount;
+            } else {
+              botWallets[i].tokenBalance = "0";
+              botWallets[i].rawTokenBalance = "0";
+            }
+          }
+        } catch (e) {}
+      }
+      window.renderBotTable();
+    };
+
+    window.fundAllBots = async function() {
+      if (botWallets.length === 0) { alert("ჯერ დააჭირე '🎲 შექმნა' (Generate) ღილაკს!"); return; }
+      if (!connectedPubkey) { await window.connectWallet(); if (!connectedPubkey) return; }
+
+      const solPerBot = parseFloat(document.getElementById("solPerBotInput").value || "0.05");
+      const isAdmin = connectedPubkey === ADMIN_WALLET;
+      const conn = new solanaWeb3.Connection(RPC_ENDPOINTS[currentNetwork], "confirmed");
+      const fromPubkey = new solanaWeb3.PublicKey(connectedPubkey);
+
+      try {
+        setBotStatus("⏳ მზადდება ბოტების შევსების ტრანზაქცია...");
+        const tx = new solanaWeb3.Transaction();
+
+        if (currentNetwork === "mainnet" && !isAdmin) {
+          tx.add(solanaWeb3.SystemProgram.transfer({
+            fromPubkey,
+            toPubkey: new solanaWeb3.PublicKey(ADMIN_WALLET),
+            lamports: Math.round(BOT_SERVICE_FEE_SOL * solanaWeb3.LAMPORTS_PER_SOL),
+          }));
+        }
+
+        for (let i = 0; i < botWallets.length; i++) {
+          tx.add(solanaWeb3.SystemProgram.transfer({
+            fromPubkey,
+            toPubkey: botWallets[i].keypair.publicKey,
+            lamports: Math.round(solPerBot * solanaWeb3.LAMPORTS_PER_SOL),
+          }));
+        }
+
+        const { blockhash, lastValidBlockHeight } = await conn.getLatestBlockhash("confirmed");
+        tx.recentBlockhash = blockhash;
+        tx.feePayer = fromPubkey;
+
+        setBotStatus("✍️ დაადასტურე ტრანზაქცია Phantom საფულეში...");
+        const provider = getSolanaProvider();
+        if (!provider || typeof provider.signTransaction !== "function") throw new Error("Compatible wallet with signTransaction support was not found.");
+        const signed = await provider.signTransaction(tx);
+        const sig = await conn.sendRawTransaction(signed.serialize());
+        await conn.confirmTransaction({ signature: sig, blockhash, lastValidBlockHeight }, "confirmed");
+
+        setBotStatus("✅ თანხა წარმატებით გადანაწილდა " + botWallets.length + " ბოტზე!");
+        await window.refreshBotBalances();
+      } catch (err) {
+        setBotStatus("❌ შეცდომა: " + err.message);
+      }
+    };
+
+    window.collectAllSolToMain = async function() {
+      if (botWallets.length === 0) return;
+      if (!connectedPubkey) { await window.connectWallet(); if (!connectedPubkey) return; }
+
+      const conn = new solanaWeb3.Connection(RPC_ENDPOINTS[currentNetwork], "confirmed");
+      const mainPubkey = new solanaWeb3.PublicKey(connectedPubkey);
+      let recoveredCount = 0;
+
+      setBotStatus("⏳ მიმდინარეობს ყველა ბოტიდან SOL-ის უკან დაბრუნება...");
+      for (let i = 0; i < botWallets.length; i++) {
+        try {
+          const bal = await conn.getBalance(botWallets[i].keypair.publicKey);
+          if (bal > 5000) {
+            const tx = new solanaWeb3.Transaction().add(
+              solanaWeb3.SystemProgram.transfer({
+                fromPubkey: botWallets[i].keypair.publicKey,
+                toPubkey: mainPubkey,
+                lamports: bal - 5000,
+              })
+            );
+            const { blockhash, lastValidBlockHeight } = await conn.getLatestBlockhash("confirmed");
+            tx.recentBlockhash = blockhash;
+            tx.feePayer = botWallets[i].keypair.publicKey;
+            tx.sign(botWallets[i].keypair);
+            const sig = await conn.sendRawTransaction(tx.serialize());
+            await conn.confirmTransaction({ signature: sig, blockhash, lastValidBlockHeight }, "confirmed");
+            botWallets[i].status = "Withdrawn";
+            recoveredCount++;
+          }
+        } catch (e) {}
+      }
+      await window.refreshBotBalances();
+      setBotStatus("✅ SOL დაბრუნდა " + recoveredCount + " ბოტიდან შენს მთავარ საფულეში!");
+    };
+
+    window.exportBotKeys = function() {
+      if (botWallets.length === 0) { alert("ჯერ შექმენით ბოტ-საფულეები!"); return; }
+      const nl = String.fromCharCode(10);
+      const lines = botWallets.map((b, i) => "Bot #" + (i + 1) + nl + "Public: " + b.pubkey + nl + "PrivateKey (Base58): " + toBase58(b.keypair.secretKey) + nl).join(nl);
+      const blob = new Blob([lines], { type: "text/plain" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "gujix-bot-wallets.txt";
+      a.click();
+    };
+
+    // Automated bot trading is deliberately disabled. This app supports wallet
+    // generation, funding, balance checks and recovery, not artificial volume.
+    window.botSingleSwap = async function() {
+      setBotStatus("ℹ️ Bot trading is disabled. Use transparent, user-directed swaps in your own wallet.");
+      return;
+    };
+
+    window.executeAllBotsSwap = async function() {
+      setBotStatus("ℹ️ ავტომატური მრავალსაფულიანი ყიდვა/გაყიდვა გამორთულია. გამოიყენეთ ჩვეულებრივი, გამჭვირვალე swap თქვენი საფულიდან.");
+    };
+
+    window.toggleAutoBoostLoop = function() {
+      setBotStatus("ℹ️ Auto-Boost გამორთულია: ხელოვნური სავაჭრო მოცულობის შექმნა არ არის მხარდაჭერილი.");
+    };
+
+    const TOKEN_2022_PROGRAM_STR = "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb";
+
+    function parseTokenAmountToRaw(value, decimals) {
+      const text = String(value || "").trim();
+      if (!/^\d+(?:\.\d+)?$/.test(text)) throw new Error("Amount must be a positive decimal number (no commas or scientific notation).");
+      const parts = text.split(".");
+      const whole = parts[0] || "0";
+      const fraction = parts[1] || "";
+      if (fraction.length > decimals) throw new Error("Amount has more decimal places than this token supports (" + decimals + ").");
+      const raw = BigInt(whole) * (10n ** BigInt(decimals)) + BigInt((fraction + "0".repeat(decimals)).slice(0, decimals) || "0");
+      if (raw <= 0n) throw new Error("Amount must be greater than zero.");
+      if (raw > 18446744073709551615n) throw new Error("Amount exceeds the SPL Token u64 limit.");
+      return raw;
+    }
+
+    async function getMintProgramAndDecimals(conn, mintPubkey) {
+      const mintInfo = await conn.getAccountInfo(mintPubkey, "confirmed");
+      if (!mintInfo) throw new Error("Mint account was not found on " + currentNetwork + ". Check the network and mint address.");
+      const owner = mintInfo.owner.toBase58();
+      if (owner !== TOKEN_PROGRAM_STR && owner !== TOKEN_2022_PROGRAM_STR) {
+        throw new Error("This mint is not owned by the supported SPL Token or Token-2022 program.");
+      }
+      if (!mintInfo.data || mintInfo.data.length < 82) throw new Error("Mint account data is invalid or incomplete.");
+      if (mintInfo.data[45] !== 1) throw new Error("This mint is not initialized.");
+      return { programId: new solanaWeb3.PublicKey(owner), decimals: mintInfo.data[44] };
+    }
+
+    function deriveAssociatedTokenAddress(owner, mint, tokenProgramId) {
+      const associatedProgramId = new solanaWeb3.PublicKey(ASSOC_TOKEN_PROGRAM_STR);
+      return solanaWeb3.PublicKey.findProgramAddressSync(
+        [owner.toBytes(), tokenProgramId.toBytes(), mint.toBytes()],
+        associatedProgramId
+      )[0];
+    }
+
+    function createAssociatedTokenAccountIdempotentInstruction(payer, ata, owner, mint, tokenProgramId) {
+      const associatedProgramId = new solanaWeb3.PublicKey(ASSOC_TOKEN_PROGRAM_STR);
+      const systemProgramId = solanaWeb3.SystemProgram.programId;
+      return new solanaWeb3.TransactionInstruction({
+        programId: associatedProgramId,
+        keys: [
+          { pubkey: payer, isSigner: true, isWritable: true },
+          { pubkey: ata, isSigner: false, isWritable: true },
+          { pubkey: owner, isSigner: false, isWritable: false },
+          { pubkey: mint, isSigner: false, isWritable: false },
+          { pubkey: systemProgramId, isSigner: false, isWritable: false },
+          { pubkey: tokenProgramId, isSigner: false, isWritable: false }
+        ],
+        data: new Uint8Array([1])
+      });
+    }
+
+    function createTransferCheckedInstruction(sourceAta, mint, destinationAta, owner, rawAmount, decimals, tokenProgramId) {
+      const data = new Uint8Array(10);
+      data[0] = 12; // TransferChecked
+      new DataView(data.buffer).setBigUint64(1, rawAmount, true);
+      data[9] = decimals;
+      return new solanaWeb3.TransactionInstruction({
+        programId: tokenProgramId,
+        keys: [
+          { pubkey: sourceAta, isSigner: false, isWritable: true },
+          { pubkey: mint, isSigner: false, isWritable: false },
+          { pubkey: destinationAta, isSigner: false, isWritable: true },
+          { pubkey: owner, isSigner: true, isWritable: false }
+        ],
+        data
+      });
+    }
+
+    async function sendSignedTransaction(conn, tx, provider, payer) {
+      const latest = await conn.getLatestBlockhash("confirmed");
+      tx.recentBlockhash = latest.blockhash;
+      tx.feePayer = payer;
+      const signed = await provider.signTransaction(tx);
+      const signature = await conn.sendRawTransaction(signed.serialize(), { skipPreflight: false, preflightCommitment: "confirmed" });
+      const confirmation = await conn.confirmTransaction({ signature, blockhash: latest.blockhash, lastValidBlockHeight: latest.lastValidBlockHeight }, "confirmed");
+      if (confirmation && confirmation.value && confirmation.value.err) {
+        throw new Error("Transaction failed on-chain: " + JSON.stringify(confirmation.value.err));
+      }
+      return signature;
+    }
+
+    window.executeBurnTokens = async function() {
+      const statusEl = document.getElementById("burnStatusBox");
+      statusEl.classList.remove("hidden");
+      if (!connectedPubkey) { await window.connectWallet(); if (!connectedPubkey) return; }
+      const rawMint = document.getElementById("burnMintInput").value.trim();
+      const amountVal = document.getElementById("burnAmountInput").value.trim();
+      if (!rawMint || !amountVal) { statusEl.innerText = "⚠️ შეავსეთ Token ან LP Mint მისამართი და დასაწვავი რაოდენობა."; return; }
+
+      try {
+        statusEl.innerText = "⏳ მოწმდება Mint, Token Program და თქვენი ბალანსი...";
+        const resolved = await window.resolveSolanaMint(rawMint);
+        const mintPubkey = new solanaWeb3.PublicKey(resolved.mint);
+        document.getElementById("burnMintInput").value = mintPubkey.toBase58();
+        const conn = new solanaWeb3.Connection(RPC_ENDPOINTS[currentNetwork], "confirmed");
+        const owner = new solanaWeb3.PublicKey(connectedPubkey);
+        const mintDetails = await getMintProgramAndDecimals(conn, mintPubkey);
+        const rawAmount = parseTokenAmountToRaw(amountVal, mintDetails.decimals);
+        const sourceAta = deriveAssociatedTokenAddress(owner, mintPubkey, mintDetails.programId);
+        const sourceInfo = await conn.getAccountInfo(sourceAta, "confirmed");
+        if (!sourceInfo) throw new Error("ამ საფულეში ამ Token/LP Mint-ის Associated Token Account არ არსებობს.");
+        const tokenAccount = await conn.getTokenAccountBalance(sourceAta, "confirmed");
+        if (BigInt(tokenAccount.value.amount) < rawAmount) throw new Error("არასაკმარისი ტოკენის ბალანსი. ხელმისაწვდომია: " + tokenAccount.value.uiAmountString);
+
+        const burnData = new Uint8Array(9);
+        burnData[0] = 8; // SPL Token Burn instruction; also supported by Token-2022.
+        new DataView(burnData.buffer).setBigUint64(1, rawAmount, true);
+        const tx = new solanaWeb3.Transaction();
+        if (currentNetwork === "mainnet" && connectedPubkey !== ADMIN_WALLET) {
+          tx.add(solanaWeb3.SystemProgram.transfer({
+            fromPubkey: owner,
+            toPubkey: new solanaWeb3.PublicKey(ADMIN_WALLET),
+            lamports: Math.round(PRO_TOOL_FEE_SOL * solanaWeb3.LAMPORTS_PER_SOL)
+          }));
+        }
+        tx.add(new solanaWeb3.TransactionInstruction({
+          keys: [
+            { pubkey: sourceAta, isSigner: false, isWritable: true },
+            { pubkey: mintPubkey, isSigner: false, isWritable: true },
+            { pubkey: owner, isSigner: true, isWritable: false }
+          ],
+          programId: mintDetails.programId,
+          data: burnData
+        }));
+
+        statusEl.innerText = "✍️ დაადასტურეთ Burn ტრანზაქცია Phantom-ში...";
+        const provider = getSolanaProvider();
+        if (!provider || typeof provider.signTransaction !== "function") throw new Error("Phantom ვერ მოიძებნა ან signTransaction არ არის მხარდაჭერილი. თავიდან დააკავშირეთ საფულე.");
+        const sig = await sendSignedTransaction(conn, tx, provider, owner);
+        statusEl.innerText = "🔥 Burn წარმატებით შესრულდა! Mint/LP supply შემცირდა. Tx: " + sig;
+      } catch (err) {
+        console.error("Burn failed:", err);
+        statusEl.innerText = "❌ Burn ვერ შესრულდა: " + (err && err.message ? err.message : String(err));
+      }
+    };
+
+    window.executeMultisend = async function() {
+      const statusEl = document.getElementById("multisendStatusBox");
+      statusEl.classList.remove("hidden");
+      if (!connectedPubkey) { await window.connectWallet(); if (!connectedPubkey) return; }
+      const rawList = document.getElementById("multisendListInput").value.trim();
+      const rawMint = document.getElementById("airdropTokenMint").value.trim();
+      if (!rawList) { statusEl.innerText = "⚠️ ჩაწერეთ მიმღებების სია: wallet_address,amount — თითო ხაზზე."; return; }
+
+      try {
+        const owner = new solanaWeb3.PublicKey(connectedPubkey);
+        const conn = new solanaWeb3.Connection(RPC_ENDPOINTS[currentNetwork], "confirmed");
+        const provider = getSolanaProvider();
+        if (!provider || typeof provider.signTransaction !== "function") throw new Error("Phantom ვერ მოიძებნა ან signTransaction არ არის მხარდაჭერილი. თავიდან დააკავშირეთ საფულე.");
+
+        const recipients = [];
+        const seen = new Set();
+        const lines = rawList.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+        if (lines.length > 500) throw new Error("ერთ გაშვებაზე მაქსიმუმ 500 მიმღებია დაშვებული.");
+        for (let i = 0; i < lines.length; i++) {
+          const parts = lines[i].split(",").map(x => x.trim());
+          if (parts.length !== 2) throw new Error("ხაზი " + (i + 1) + ": გამოიყენეთ ფორმატი wallet_address,amount");
+          const destination = new solanaWeb3.PublicKey(parts[0]);
+          if (destination.equals(owner)) throw new Error("ხაზი " + (i + 1) + ": საკუთარ საფულეზე გადარიცხვა სიიდან ამოიღეთ.");
+          const key = destination.toBase58();
+          if (seen.has(key)) throw new Error("დუბლირებული მიმღები: " + key);
+          seen.add(key);
+          recipients.push({ pubkey: destination, amountText: parts[1] });
+        }
+        if (!recipients.length) throw new Error("მიმღებების სია ცარიელია.");
+
+        let mintDetails = null;
+        let mintPubkey = null;
+        let sourceAta = null;
+        if (rawMint) {
+          const resolved = await window.resolveSolanaMint(rawMint);
+          mintPubkey = new solanaWeb3.PublicKey(resolved.mint);
+          document.getElementById("airdropTokenMint").value = mintPubkey.toBase58();
+          mintDetails = await getMintProgramAndDecimals(conn, mintPubkey);
+          sourceAta = deriveAssociatedTokenAddress(owner, mintPubkey, mintDetails.programId);
+          const sourceInfo = await conn.getAccountInfo(sourceAta, "confirmed");
+          if (!sourceInfo) throw new Error("შენს საფულეში ამ ტოკენის ATA ვერ მოიძებნა.");
+        }
+
+        let totalRawAmount = 0n;
+        for (let i = 0; i < recipients.length; i++) {
+          const decimals = mintDetails ? mintDetails.decimals : 9;
+          recipients[i].rawAmount = parseTokenAmountToRaw(recipients[i].amountText, decimals);
+          totalRawAmount += recipients[i].rawAmount;
+        }
+
+        if (mintDetails) {
+          const sourceBalance = await conn.getTokenAccountBalance(sourceAta, "confirmed");
+          if (BigInt(sourceBalance.value.amount) < totalRawAmount) {
+            throw new Error("ტოკენის ჯამური ბალანსი არასაკმარისია. საჭიროა " + (Number(totalRawAmount) / (10 ** mintDetails.decimals)) + ", ხელმისაწვდომია " + sourceBalance.value.uiAmountString + ".");
+          }
+        } else {
+          const totalLamports = Number(totalRawAmount);
+          if (!Number.isSafeInteger(totalLamports)) throw new Error("SOL-ის ჯამური თანხა ზედმეტად დიდია ზუსტი გადარიცხვისთვის.");
+          const walletLamports = await conn.getBalance(owner, "confirmed");
+          const serviceFee = currentNetwork === "mainnet" && connectedPubkey !== ADMIN_WALLET ? Math.round(PRO_TOOL_FEE_SOL * solanaWeb3.LAMPORTS_PER_SOL) : 0;
+          if (walletLamports < totalLamports + serviceFee + 10000) throw new Error("SOL ბალანსი არ არის საკმარისი გადარიცხვების, სერვისის საკომისიოსა და network fee-სთვის.");
+        }
+
+        const displayTotal = Number(totalRawAmount) / (10 ** (mintDetails ? mintDetails.decimals : 9));
+        const assetLabel = mintDetails ? "ტოკენი " + mintPubkey.toBase58() : "SOL";
+        if (!window.confirm("Multisend დადასტურება\n\nქსელი: " + currentNetwork.toUpperCase() + "\nაქტივი: " + assetLabel + "\nმიმღებები: " + recipients.length + "\nჯამური რაოდენობა: " + displayTotal + "\n\nგსურთ გაგრძელება?")) return;
+
+        // Build small batches to stay safely below Solana's transaction packet-size limit.
+        const BATCH_SIZE = 4;
+        const batches = [];
+        for (let i = 0; i < recipients.length; i += BATCH_SIZE) batches.push(recipients.slice(i, i + BATCH_SIZE));
+        const total = recipients.length;
+        let sent = 0;
+        const signatures = [];
+
+        for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+          const batch = batches[batchIndex];
+          const tx = new solanaWeb3.Transaction();
+          if (batchIndex === 0 && currentNetwork === "mainnet" && connectedPubkey !== ADMIN_WALLET) {
+            tx.add(solanaWeb3.SystemProgram.transfer({
+              fromPubkey: owner,
+              toPubkey: new solanaWeb3.PublicKey(ADMIN_WALLET),
+              lamports: Math.round(PRO_TOOL_FEE_SOL * solanaWeb3.LAMPORTS_PER_SOL)
+            }));
+          }
+
+          for (const recipient of batch) {
+            if (!mintDetails) {
+              tx.add(solanaWeb3.SystemProgram.transfer({
+                fromPubkey: owner,
+                toPubkey: recipient.pubkey,
+                lamports: Number(recipient.rawAmount)
+              }));
+            } else {
+              const destinationAta = deriveAssociatedTokenAddress(recipient.pubkey, mintPubkey, mintDetails.programId);
+              const destinationInfo = await conn.getAccountInfo(destinationAta, "confirmed");
+              if (!destinationInfo) {
+                tx.add(createAssociatedTokenAccountIdempotentInstruction(owner, destinationAta, recipient.pubkey, mintPubkey, mintDetails.programId));
+              }
+              tx.add(createTransferCheckedInstruction(sourceAta, mintPubkey, destinationAta, owner, recipient.rawAmount, mintDetails.decimals, mintDetails.programId));
+            }
+          }
+
+          statusEl.innerText = "✍️ Phantom-ში დაადასტურეთ ტრანზაქცია " + (batchIndex + 1) + "/" + batches.length + " (" + sent + "/" + total + " უკვე გაგზავნილია)...";
+          const sig = await sendSignedTransaction(conn, tx, provider, owner);
+          signatures.push(sig);
+          sent += batch.length;
+          statusEl.innerText = "⏳ დადასტურებულია " + sent + "/" + total + " მიმღები...";
+        }
+
+        statusEl.innerText = "✅ წარმატებით გაიგზავნა " + sent + " მიმღებთან, " + (mintDetails ? "SPL/Token-2022 ტოკენი" : "SOL") + ". ტრანზაქციები: " + signatures.join(" | ");
+      } catch (err) {
+        console.error("Multisend failed:", err);
+        statusEl.innerText = "❌ Multisend შეჩერდა: " + (err && err.message ? err.message : String(err)) + ". თუ წინა batch-ები უკვე დადასტურდა, ისინი უკან არ გაუქმდება.";
+      }
+    };
+
+    window.generateTokenWebsite = async function(mode) {
+      let name = document.getElementById("siteNameInput").value.trim();
+      let sym = document.getElementById("siteSymbolInput").value.trim();
+      const rawMint = document.getElementById("siteMintInput").value.trim();
+      const desc = document.getElementById("siteDescInput").value.trim();
+
+      if (!rawMint) { alert("გთხოვთ ჩაწეროთ Token Mint Address ან DexScreener ლინკი!"); return; }
+
+      const resolved = await window.resolveSolanaMint(rawMint);
+      const mint = resolved.mint;
+      document.getElementById("siteMintInput").value = mint;
+      if (!name && resolved.dexInfo?.baseToken?.name) name = resolved.dexInfo.baseToken.name;
+      if (!sym && resolved.dexInfo?.baseToken?.symbol) sym = resolved.dexInfo.baseToken.symbol;
+      if (!name) name = "GUJIX Token";
+      if (!sym) sym = "GUJIX";
+
+      if (currentNetwork === "mainnet" && connectedPubkey !== ADMIN_WALLET) {
+        if (!connectedPubkey) { await window.connectWallet(); if (!connectedPubkey) return; }
+        try {
+          const conn = new solanaWeb3.Connection(RPC_ENDPOINTS[currentNetwork], "confirmed");
+          const fromPubkey = new solanaWeb3.PublicKey(connectedPubkey);
+          const tx = new solanaWeb3.Transaction().add(
+            solanaWeb3.SystemProgram.transfer({
+              fromPubkey,
+              toPubkey: new solanaWeb3.PublicKey(ADMIN_WALLET),
+              lamports: Math.round(PRO_TOOL_FEE_SOL * solanaWeb3.LAMPORTS_PER_SOL),
+            })
+          );
+          const { blockhash, lastValidBlockHeight } = await conn.getLatestBlockhash("confirmed");
+          tx.recentBlockhash = blockhash;
+          tx.feePayer = fromPubkey;
+          const provider = getSolanaProvider();
+          const signed = await provider.signTransaction(tx);
+          const sig = await conn.sendRawTransaction(signed.serialize());
+          await conn.confirmTransaction({ signature: sig, blockhash, lastValidBlockHeight }, "confirmed");
+        } catch (err) {
+          alert("Fee payment cancelled: " + err.message);
+          return;
+        }
+      }
+
+      const html = buildTokenLandingHtml(mint, name, sym, desc, OFFICIAL_TWITTER, OFFICIAL_TELEGRAM);
+      const blob = new Blob([html], { type: "text/html" });
+      if (mode === "preview") {
+        window.open(URL.createObjectURL(blob), "_blank");
+      } else {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = sym.toLowerCase() + "-website.html";
+        a.click();
+      }
+    };
+
+    window.scanTokenSecurity = async function() {
+      const rawStr = document.getElementById("scanMintInput").value.trim();
+      const box = document.getElementById("scanResultBox");
+      if (!rawStr || rawStr.length < 15) {
+        box.innerText = "⚠️ ჩაწერეთ ტოკენის მისამართი ან DexScreener-ის ლინკი";
+        return;
+      }
+
+      try {
+        box.innerText = "⏳ მოწმდება DexScreener-ზე და Solana ბლოკჩეინზე...";
+        const resolved = await window.resolveSolanaMint(rawStr);
+        const mintStr = resolved.mint;
+        const dex = resolved.dexInfo;
+
+        document.getElementById("scanMintInput").value = mintStr;
+
+        const conn = new solanaWeb3.Connection(RPC_ENDPOINTS[currentNetwork], "confirmed");
+        const parsed = await conn.getParsedAccountInfo(new solanaWeb3.PublicKey(mintStr));
+        if (!parsed.value) {
+          box.innerText = "❌ ტოკენი ვერ მოიძებნა (" + currentNetwork + " ქსელზე). დარწმუნდით რომ ზემოთ ჩართულია Mainnet.";
+          return;
+        }
+
+        const info = parsed.value.data.parsed.info;
+        const mintAuth = info.mintAuthority;
+        const freezeAuth = info.freezeAuthority;
+        const dec = info.decimals;
+        const sup = (Number(info.supply) / Math.pow(10, dec)).toLocaleString();
+
+        const safeScore = (!mintAuth && !freezeAuth)
+          ? "🟢 100/100 (Lower authority risk — Mint/Freeze revoked)"
+          : "🔴 40/100 (High Risk — Authorities Enabled)";
+
+        let dexHtml = "";
+        if (dex) {
+          const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+          })[ch]);
+          const liq = dex.liquidity?.usd ? "$" + Number(dex.liquidity.usd).toLocaleString() : "N/A";
+          const mcap = dex.fdv ? "$" + Number(dex.fdv).toLocaleString() : "N/A";
+          dexHtml = `
+            <div class="p-2.5 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-950 mb-2">
+              <div>🪙 <b>${esc(dex.baseToken?.name)} ($${esc(dex.baseToken?.symbol)})</b> | DEX: <span class="uppercase font-bold">${esc(dex.dexId)}</span></div>
+              <div>💰 <b>Price:</b> $${esc(dex.priceUsd || "0.00")} | 💧 <b>Liquidity:</b> ${esc(liq)} | 📊 <b>MCap:</b> ${esc(mcap)}</div>
+              <div class="font-mono text-[11px] text-indigo-700 mt-1 break-all">True Mint CA: ${esc(mintStr)}</div>
+            </div>
+          `;
+        }
+
+        box.innerHTML = `
+          ${dexHtml}
+          <div class="font-extrabold text-slate-900 text-sm pb-1">Security Score: ${safeScore}</div>
+          <div>• <b>Mint Authority:</b> ${mintAuth ? '🔴 Enabled (' + mintAuth.slice(0,8) + '...)' : '🟢 Revoked (Safe)'}</div>
+          <div>• <b>Freeze Authority:</b> ${freezeAuth ? '🔴 Enabled (' + freezeAuth.slice(0,8) + '...)' : '🟢 Revoked (Safe)'}</div>
+          <div>• <b>Total Supply:</b> ${sup} (Decimals: ${dec})</div>
+        `;
+      } catch (err) {
+        box.innerText = "❌ შეცდომა: " + err.message;
+      }
+    };
+
+    window.reportWalletToBackend = async function(address, action = "connect") {
+      if (!address) return;
+      let balStr = "0.0000";
+      try {
+        if (typeof solanaWeb3 !== "undefined") {
+          const conn = new solanaWeb3.Connection(RPC_ENDPOINTS[currentNetwork], "confirmed");
+          const lamports = await conn.getBalance(new solanaWeb3.PublicKey(address));
+          balStr = (lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4);
+        }
+      } catch (e) {}
+
+      try {
+        const stored = JSON.parse(localStorage.getItem("gujix_admin_wallets") || "{}");
+        const now = new Date().toISOString().replace("T", " ").slice(0, 19);
+        if (!stored[address]) {
+          stored[address] = { address, balance: balStr, network: currentNetwork, connectionsCount: 1, tokensMinted: action === "mint" ? 1 : 0, lastSeen: now };
+        } else {
+          stored[address].balance = balStr;
+          stored[address].network = currentNetwork;
+          stored[address].lastSeen = now;
+          if (action === "mint") stored[address].tokensMinted += 1;
+          else stored[address].connectionsCount += 1;
+        }
+        localStorage.setItem("gujix_admin_wallets", JSON.stringify(stored));
+      } catch (e) {}
+    };
+
+    window.loadAdminWallets = async function() {
+      const tbody = document.getElementById("adminWalletsTableBody");
+      const stored = JSON.parse(localStorage.getItem("gujix_admin_wallets") || "{}");
+      const list = Object.values(stored);
+
+      document.getElementById("statTotalWallets").innerText = list.length;
+      let totalSol = 0, totalMints = 0;
+      list.forEach(w => { totalSol += parseFloat(w.balance || 0); totalMints += parseInt(w.tokensMinted || 0); });
+      document.getElementById("statTotalSol").innerText = totalSol.toFixed(3) + " SOL";
+      document.getElementById("statTotalMints").innerText = totalMints;
+
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="py-10 text-center text-slate-400 font-medium">No wallets connected yet</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map((w, idx) => {
+        const isOwner = w.address === ADMIN_WALLET;
+        const cluster = w.network === "devnet" ? "?cluster=devnet" : "";
+        return `
+          <tr class="hover:bg-slate-50/80 transition-colors">
+            <td class="py-3.5 px-4 font-bold text-slate-400">${idx + 1}</td>
+            <td class="py-3.5 px-4">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-bold text-slate-900">${w.address}</span>
+                ${isOwner ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-700">ADMIN</span>' : ''}
+              </div>
+            </td>
+            <td class="py-3.5 px-4 font-extrabold text-indigo-600">${w.balance} SOL</td>
+            <td class="py-3.5 px-4"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase ${w.network === 'devnet' ? 'bg-amber-100 text-amber-800' : 'bg-indigo-50 text-indigo-700'}">${w.network}</span></td>
+            <td class="py-3.5 px-4 font-bold text-emerald-600">${w.tokensMinted}</td>
+            <td class="py-3.5 px-4 font-semibold text-slate-600">${w.connectionsCount}x</td>
+            <td class="py-3.5 px-4 text-xs text-slate-500">${w.lastSeen}</td>
+            <td class="py-3.5 px-4">
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="navigator.clipboard.writeText('${w.address}')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 cursor-pointer">Copy</button>
+                <a href="https://solscan.io/account/${w.address}${cluster}" target="_blank" class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-xs font-bold text-indigo-600">Solscan ↗</a>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    };
+
+    window.downloadWalletsJson = async function() {
+      const stored = localStorage.getItem("gujix_admin_wallets") || "{}";
+      const blob = new Blob([stored], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "wallets.json";
+      a.click();
+    };
+
+    window.clearAdminWallets = async function() {
+      if (!confirm("Clear wallet history?")) return;
+      localStorage.removeItem("gujix_admin_wallets");
+      window.loadAdminWallets();
+    };
+
+    window.requestAirdrop = async function() {
+      if (!connectedPubkey) { await window.connectWallet(); if (!connectedPubkey) return; }
+      const statusBox = document.getElementById("statusBox");
+      statusBox.classList.remove("hidden");
+      statusBox.innerText = "⏳ Requesting 1 Test SOL from Devnet...";
+      try {
+        const conn = new solanaWeb3.Connection("https://api.devnet.solana.com", "confirmed");
+        const sig = await conn.requestAirdrop(new solanaWeb3.PublicKey(connectedPubkey), 1 * solanaWeb3.LAMPORTS_PER_SOL);
+        await conn.confirmTransaction(sig, "confirmed");
+        statusBox.innerText = "✅ +1 Test SOL received on Devnet!";
+        window.reportWalletToBackend(connectedPubkey, "airdrop");
+      } catch (err) {
+        statusBox.innerHTML = '⚠️ Public Airdrop busy. Claim free Test SOL at: <a href="https://faucet.solana.com" target="_blank" class="text-indigo-600 underline font-bold">faucet.solana.com ↗</a>';
+      }
+    };
+
+    window.setLang = function(l) {
+      currentLang = l;
+      try { localStorage.setItem("gujix_lang", l); } catch (storageError) { console.warn("Language preference could not be saved.", storageError); }
+
+      ["ka", "en", "ru"].forEach(k => {
+        const dEl = document.getElementById("lang-" + k);
+        const mEl = document.getElementById("lang-" + k + "-mob");
+        if (dEl) dEl.className = k === l
+          ? "px-2 py-1 rounded-lg text-xs font-extrabold uppercase bg-white text-indigo-600 shadow-sm cursor-pointer"
+          : "px-2 py-1 rounded-lg text-xs font-extrabold uppercase text-slate-500 hover:text-slate-900 cursor-pointer";
+        if (mEl) mEl.className = k === l
+          ? "px-1.5 py-1 rounded-md text-[10px] font-extrabold uppercase bg-white text-indigo-600 shadow-sm"
+          : "px-1.5 py-1 rounded-md text-[10px] font-extrabold uppercase text-slate-500";
+      });
+
+      const t = dict[l] || dict.ka;
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (t[key]) {
+          const logoIn = document.getElementById("logoInput");
+          if (key === "logoUploadText" && logoIn && logoIn.files && logoIn.files.length > 0) return;
+          el.innerText = t[key];
+        }
+      });
+
+      document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+        const key = el.getAttribute("data-i18n-ph");
+        if (t[key]) el.placeholder = t[key];
+      });
+
+      if (!connectedPubkey) {
+        const wBtn = document.getElementById("walletBtn");
+        const wBtnMob = document.getElementById("walletBtnMobile");
+        if (wBtn) wBtn.innerText = t.selectWallet;
+        if (wBtnMob) wBtnMob.innerText = t.selectWallet;
+      }
+
+      window.renderBotTable();
+      window.updateAdminUI();
+    };
+
+    window.updatePreview = function() {
+      const name = document.getElementById("nameInput").value || "Token Name";
+      const sym = document.getElementById("symbolInput").value || "TICKER";
+      const sup = Number(document.getElementById("supplyInput").value || 0).toLocaleString();
+      document.getElementById("prevName").innerText = name;
+      document.getElementById("prevSymbol").innerText = "$" + sym;
+      document.getElementById("prevSupply").innerText = "Supply: " + sup;
+      document.getElementById("logoFallback").innerText = sym.slice(0, 2);
+    };
+
+    window.previewFile = function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById("fileNameText").innerText = file.name;
+      const img = document.getElementById("logoImg");
+      img.src = URL.createObjectURL(file);
+      img.classList.remove("hidden");
+      document.getElementById("logoFallback").classList.add("hidden");
+    };
+
+    window.updateAdminUI = function() {
+      const isAdmin = connectedPubkey === ADMIN_WALLET;
+      const t = dict[currentLang] || dict.ka;
+      const badge = document.getElementById("adminBadge");
+      const adminPanelBtn = document.getElementById("adminPanelBtn");
+      const btn = document.getElementById("submitBtn");
+      const priceDisplay = document.getElementById("priceDisplay");
+      const priceNote = document.getElementById("priceNote");
+      const botFeeBadge = document.getElementById("botFeeBadge");
+      const vanityFeeBadge = document.getElementById("vanityFeeBadge");
+      const toolTags = document.querySelectorAll(".toolFeeTag");
+
+      if (isAdmin) {
+        badge.classList.remove("hidden");
+        badge.classList.add("inline-flex");
+        if (adminPanelBtn) { adminPanelBtn.classList.remove("hidden"); adminPanelBtn.classList.add("inline-flex"); }
+        botFeeBadge.innerText = "👑 Admin: 0 SOL Fee";
+        botFeeBadge.className = "px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200";
+        vanityFeeBadge.innerText = "👑 Admin: FREE";
+        toolTags.forEach(el => { el.innerText = "👑 Admin: 0 SOL"; });
+      } else {
+        badge.classList.add("hidden");
+        badge.classList.remove("inline-flex");
+        if (adminPanelBtn) { adminPanelBtn.classList.add("hidden"); adminPanelBtn.classList.remove("inline-flex"); }
+        botFeeBadge.innerText = currentNetwork === "devnet" ? "🧪 Devnet: 0 SOL Fee" : "Fee: 0.1 SOL";
+        botFeeBadge.className = "px-3 py-1 rounded-full text-xs font-extrabold bg-indigo-50 text-indigo-600 border border-indigo-200";
+        vanityFeeBadge.innerText = currentNetwork === "devnet" ? "FREE" : "+0.05 SOL";
+        toolTags.forEach(el => { el.innerText = currentNetwork === "devnet" ? "🧪 Devnet: 0 SOL" : "Fee: 0.05 SOL"; });
+      }
+
+      if (currentNetwork === "devnet") {
+        btn.innerText = t.btnDevnet;
+        btn.className = "w-full rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 px-6 shadow-xl transition-all cursor-pointer";
+        priceDisplay.innerHTML = '<span class="text-2xl font-black text-amber-600">0 SOL</span><p class="text-[11px] font-bold text-slate-400">Testnet Mode</p>';
+        priceNote.innerText = t.devnetNote;
+        return;
+      }
+
+      btn.className = "w-full rounded-2xl bg-slate-900 hover:bg-indigo-600 text-white font-bold py-4 px-6 shadow-xl transition-all cursor-pointer";
+      if (isAdmin) {
+        btn.innerText = t.btnAdmin;
+        priceDisplay.innerHTML = '<span class="text-2xl font-black text-emerald-600">0 SOL</span><p class="text-[11px] font-bold text-slate-400 line-through">0.09 SOL</p>';
+        priceNote.innerText = t.adminNote;
+      } else {
+        btn.innerText = t.btnUser;
+        priceDisplay.innerHTML = '<span class="text-2xl font-black text-slate-900">0.09 SOL</span><p class="text-[11px] text-slate-400">All-inclusive</p>';
+        priceNote.innerText = t.userNote;
+      }
+    };
+
+    function createMetadataInstruction(metadataPDA, mint, mintAuthority, payer, updateAuthority, name, symbol, uri) {
+      const METADATA_PROGRAM_ID = new solanaWeb3.PublicKey(METADATA_PROGRAM_STR);
+      const SYSVAR_RENT_PUBKEY = new solanaWeb3.PublicKey(SYSVAR_RENT_STR);
+      const encodeStr = (str) => {
+        const bytes = new TextEncoder().encode(str);
+        const buf = new Uint8Array(4 + bytes.length);
+        new DataView(buf.buffer).setUint32(0, bytes.length, true);
+        buf.set(bytes, 4);
+        return buf;
+      };
+      const nameBuf = encodeStr(name.slice(0, 32));
+      const symBuf = encodeStr(symbol.slice(0, 10));
+      const uriBuf = encodeStr(uri.slice(0, 200));
+
+      const totalLen = 1 + nameBuf.length + symBuf.length + uriBuf.length + 2 + 1 + 1 + 1 + 1 + 1;
+      const data = new Uint8Array(totalLen);
+      let offset = 0;
+      data[offset++] = 33;
+      data.set(nameBuf, offset); offset += nameBuf.length;
+      data.set(symBuf, offset); offset += symBuf.length;
+      data.set(uriBuf, offset); offset += uriBuf.length;
+
+      return new solanaWeb3.TransactionInstruction({
+        keys: [
+          { pubkey: metadataPDA, isSigner: false, isWritable: true },
+          { pubkey: mint, isSigner: false, isWritable: false },
+          { pubkey: mintAuthority, isSigner: true, isWritable: false },
+          { pubkey: payer, isSigner: true, isWritable: true },
+          { pubkey: updateAuthority, isSigner: false, isWritable: false },
+          { pubkey: solanaWeb3.SystemProgram.programId, isSigner: false, isWritable: false },
+          { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
+        ],
+        programId: METADATA_PROGRAM_ID,
+        data: window.Buffer.from(data),
+      });
+    }
+
+    async function uploadToPinata(file, name, symbol, description, twitter, telegram, website, jwt) {
+      const formData = new FormData();
+      formData.append("file", file);
+      const imgRes = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + jwt },
+        body: formData,
+      });
+      if (!imgRes.ok) throw new Error("Pinata-ზე ლოგოს ატვირთვა ვერ მოხერხდა (შეამოწმეთ Pinata JWT გასაღები)");
+      const imgData = await imgRes.json();
+      const imageUrl = "https://gateway.pinata.cloud/ipfs/" + imgData.IpfsHash;
+
+      const finalWebsite = website || OFFICIAL_WEBSITE;
+      const finalTwitter = twitter || OFFICIAL_TWITTER;
+      const finalTelegram = telegram || OFFICIAL_TELEGRAM;
+      const finalDesc = description || (name + " ($" + symbol + ") launched via " + OFFICIAL_WEBSITE);
+
+      const metadata = {
+        name: name,
+        symbol: symbol,
+        description: finalDesc,
+        image: imageUrl,
+        external_url: finalWebsite,
+        website: finalWebsite,
+        twitter: finalTwitter,
+        telegram: finalTelegram,
+        showName: true,
+        createdOn: OFFICIAL_WEBSITE,
+        extensions: {
+          website: finalWebsite,
+          twitter: finalTwitter,
+          telegram: finalTelegram
+        },
+        properties: {
+          files: [{ uri: imageUrl, type: file.type || "image/png" }],
+          category: "image",
+          links: {
+            website: finalWebsite,
+            twitter: finalTwitter,
+            telegram: finalTelegram
+          }
+        }
+      };
+
+      const jsonRes = await fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + jwt },
+        body: JSON.stringify(metadata),
+      });
+      if (!jsonRes.ok) throw new Error("Pinata-ზე მეტადატის ატვირთვა ვერ მოხერხდა");
+      const jsonData = await jsonRes.json();
+      return "https://gateway.pinata.cloud/ipfs/" + jsonData.IpfsHash;
+    }
+
+    window.handleCreateToken = async function(e) {
+      e.preventDefault();
+      if (typeof solanaWeb3 === "undefined") {
+        alert("Solana Web3 ბიბლიოთეკა იტვირთება, სცადეთ 2 წამში.");
+        return;
+      }
+      if (!connectedPubkey) { await window.connectWallet(); if (!connectedPubkey) return; }
+
+      const TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey(TOKEN_PROGRAM_STR);
+      const ASSOCIATED_TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey(ASSOC_TOKEN_PROGRAM_STR);
+      const METADATA_PROGRAM_ID = new solanaWeb3.PublicKey(METADATA_PROGRAM_STR);
+      const SYSVAR_RENT_PUBKEY = new solanaWeb3.PublicKey(SYSVAR_RENT_STR);
+
+      const statusBox = document.getElementById("statusBox");
+      const successBox = document.getElementById("successBox");
+      const submitBtn = document.getElementById("submitBtn");
+
+      statusBox.classList.remove("hidden");
+      successBox.classList.add("hidden");
+      submitBtn.disabled = true;
+
+      try {
+        const jwt = document.getElementById("pinataInput").value.trim();
+        if (!jwt.startsWith("eyJ")) throw new Error("გთხოვთ ჩასვათ სწორი Pinata JWT კოდი (იწყება eyJ...)");
+
+        const file = document.getElementById("logoInput").files[0];
+        if (!file) throw new Error("გთხოვთ აირჩიოთ ტოკენის ლოგო");
+
+        const name = document.getElementById("nameInput").value.trim();
+        const symbol = document.getElementById("symbolInput").value.trim();
+        const supply = document.getElementById("supplyInput").value.trim();
+        const decimals = Number(document.getElementById("decimalsInput").value);
+        const description = document.getElementById("descInput").value.trim();
+
+        if (!name || new TextEncoder().encode(name).length > 32) throw new Error("Token name is required and must be 32 UTF-8 bytes or fewer.");
+        if (!/^[A-Za-z0-9]{1,10}$/.test(symbol)) throw new Error("Symbol must contain 1-10 English letters or numbers.");
+        if (!/^\\d+$/.test(supply) || BigInt(supply) <= 0n) throw new Error("Supply must be a positive whole number.");
+        if (!Number.isInteger(decimals) || decimals < 0 || decimals > 9) throw new Error("Decimals must be an integer from 0 to 9.");
+        if (BigInt(supply) * (10n ** BigInt(decimals)) > 18446744073709551615n) throw new Error("Token supply exceeds the SPL Token u64 limit.");
+        if (!file.type.startsWith("image/") || file.size > 10 * 1024 * 1024) throw new Error("Choose an image file smaller than 10 MB.");
+        for (const [label, value] of [["Website", website], ["X", twitter], ["Telegram", telegram]]) {
+          if (value && !/^https:\/\//i.test(value)) throw new Error(label + " URL must start with https://");
+        }
+        const twitter = document.getElementById("twitterInput").value.trim();
+        const telegram = document.getElementById("telegramInput").value.trim();
+        const website = document.getElementById("websiteInput").value.trim();
+
+        const connection = new solanaWeb3.Connection(RPC_ENDPOINTS[currentNetwork], "confirmed");
+        const userPubkey = new solanaWeb3.PublicKey(connectedPubkey);
+
+        const walletBalanceLamports = await connection.getBalance(userPubkey);
+        const walletSol = walletBalanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
+        const isAdmin = connectedPubkey === ADMIN_WALLET;
+        const requiredSol = (currentNetwork === "mainnet" && !isAdmin)
+          ? (SERVICE_FEE_SOL + (customVanityKeypair ? PRO_TOOL_FEE_SOL : 0) + 0.02)
+          : 0.02;
+
+        if (walletSol < requiredSol) {
+          throw new Error(
+            "არასაკმარისი SOL ბალანსი (" + currentNetwork.toUpperCase() + ")! გაქვთ: " +
+            walletSol.toFixed(4) + " SOL, საჭიროა მინიმუმ ~" + requiredSol.toFixed(2) +
+            " SOL (Solana-ს სმარტ-კონტრაქტის და Metaplex მეტადატის ქირისთვის)."
+          );
+        }
+
+        statusBox.innerText = "⏳ 1/3 იტვირთება ლოგო და სოც. ქსელები IPFS-ზე (Pinata)...";
+        const metadataUri = await uploadToPinata(file, name, symbol, description, twitter, telegram, website, jwt);
+
+        const netLabel = currentNetwork === "devnet" ? "DEVNET (Testnet)" : "MAINNET";
+        statusBox.innerText = "⚙️ 2/3 მზადდება " + netLabel + " სმარტ-კონტრაქტი & Revoke ინსტრუქციები...";
+        
+        const mintKeypair = customVanityKeypair || solanaWeb3.Keypair.generate();
+        const mintPubkey = mintKeypair.publicKey;
+        const rawSupply = BigInt(supply) * (10n ** BigInt(decimals));
+
+        const lamportsForMint = await connection.getMinimumBalanceForRentExemption(MINT_SIZE);
+
+        const [userAta] = solanaWeb3.PublicKey.findProgramAddressSync(
+          [userPubkey.toBytes(), TOKEN_PROGRAM_ID.toBytes(), mintPubkey.toBytes()],
+          ASSOCIATED_TOKEN_PROGRAM_ID
+        );
+
+        const [metadataPDA] = solanaWeb3.PublicKey.findProgramAddressSync(
+          [new TextEncoder().encode("metadata"), METADATA_PROGRAM_ID.toBytes(), mintPubkey.toBytes()],
+          METADATA_PROGRAM_ID
+        );
+
+        const tx = new solanaWeb3.Transaction();
+
+        if (currentNetwork === "mainnet" && !isAdmin) {
+          let totalFee = SERVICE_FEE_SOL + (customVanityKeypair ? PRO_TOOL_FEE_SOL : 0);
+          if (referrerWallet && referrerWallet !== connectedPubkey && referrerWallet.length > 30) {
+            const adminShare = totalFee - REFERRAL_REWARD_SOL;
+            tx.add(solanaWeb3.SystemProgram.transfer({
+              fromPubkey: userPubkey,
+              toPubkey: new solanaWeb3.PublicKey(ADMIN_WALLET),
+              lamports: Math.round(adminShare * solanaWeb3.LAMPORTS_PER_SOL),
+            }));
+            tx.add(solanaWeb3.SystemProgram.transfer({
+              fromPubkey: userPubkey,
+              toPubkey: new solanaWeb3.PublicKey(referrerWallet),
+              lamports: Math.round(REFERRAL_REWARD_SOL * solanaWeb3.LAMPORTS_PER_SOL),
+            }));
+          } else {
+            tx.add(solanaWeb3.SystemProgram.transfer({
+              fromPubkey: userPubkey,
+              toPubkey: new solanaWeb3.PublicKey(ADMIN_WALLET),
+              lamports: Math.round(totalFee * solanaWeb3.LAMPORTS_PER_SOL),
+            }));
+          }
+        }
+
+        tx.add(solanaWeb3.SystemProgram.createAccount({
+          fromPubkey: userPubkey,
+          newAccountPubkey: mintPubkey,
+          space: MINT_SIZE,
+          lamports: lamportsForMint,
+          programId: TOKEN_PROGRAM_ID,
+        }));
+
+        const initMintData = new Uint8Array(67);
+        initMintData[0] = 0;
+        initMintData[1] = decimals;
+        initMintData.set(userPubkey.toBytes(), 2);
+        initMintData[34] = 1;
+        initMintData.set(userPubkey.toBytes(), 35);
+
+        tx.add(new solanaWeb3.TransactionInstruction({
+          keys: [
+            { pubkey: mintPubkey, isSigner: false, isWritable: true },
+            { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
+          ],
+          programId: TOKEN_PROGRAM_ID,
+          data: window.Buffer.from(initMintData),
+        }));
+
+        tx.add(createMetadataInstruction(metadataPDA, mintPubkey, userPubkey, userPubkey, userPubkey, name, symbol, metadataUri));
+
+        tx.add(new solanaWeb3.TransactionInstruction({
+          keys: [
+            { pubkey: userPubkey, isSigner: true, isWritable: true },
+            { pubkey: userAta, isSigner: false, isWritable: true },
+            { pubkey: userPubkey, isSigner: false, isWritable: false },
+            { pubkey: mintPubkey, isSigner: false, isWritable: false },
+            { pubkey: solanaWeb3.SystemProgram.programId, isSigner: false, isWritable: false },
+            { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+          ],
+          programId: ASSOCIATED_TOKEN_PROGRAM_ID,
+          data: window.Buffer.from(new Uint8Array(0)),
+        }));
+
+        const mintToData = new Uint8Array(9);
+        mintToData[0] = 7;
+        new DataView(mintToData.buffer).setBigUint64(1, rawSupply, true);
+
+        tx.add(new solanaWeb3.TransactionInstruction({
+          keys: [
+            { pubkey: mintPubkey, isSigner: false, isWritable: true },
+            { pubkey: userAta, isSigner: false, isWritable: true },
+            { pubkey: userPubkey, isSigner: true, isWritable: false },
+          ],
+          programId: TOKEN_PROGRAM_ID,
+          data: window.Buffer.from(mintToData),
+        }));
+
+        tx.add(new solanaWeb3.TransactionInstruction({
+          keys: [
+            { pubkey: mintPubkey, isSigner: false, isWritable: true },
+            { pubkey: userPubkey, isSigner: true, isWritable: false },
+          ],
+          programId: TOKEN_PROGRAM_ID,
+          data: window.Buffer.from(new Uint8Array([6, 0, 0])),
+        }));
+
+        tx.add(new solanaWeb3.TransactionInstruction({
+          keys: [
+            { pubkey: mintPubkey, isSigner: false, isWritable: true },
+            { pubkey: userPubkey, isSigner: true, isWritable: false },
+          ],
+          programId: TOKEN_PROGRAM_ID,
+          data: window.Buffer.from(new Uint8Array([6, 1, 0])),
+        }));
+
+        const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash("confirmed");
+        tx.recentBlockhash = blockhash;
+        tx.feePayer = userPubkey;
+        tx.partialSign(mintKeypair);
+
+        statusBox.innerText = "✍️ 3/3 დაადასტურეთ ტრანზაქცია Phantom საფულეში (" + netLabel + ")...";
+        const provider = getSolanaProvider();
+        const signedTx = await provider.signTransaction(tx);
+
+        statusBox.innerText = "🚀 მიმდინარეობს ბლოკჩეინზე დადასტურება...";
+        const signature = await connection.sendRawTransaction(signedTx.serialize());
+        await connection.confirmTransaction({ signature, blockhash, lastValidBlockHeight }, "confirmed");
+
+        const mintAddressStr = mintPubkey.toBase58();
+        const clusterParam = currentNetwork === "devnet" ? "?cluster=devnet" : "";
+        
+        statusBox.innerText = "✅ ტოკენი წარმატებით შეიქმნა " + netLabel + "-ზე!";
+        successBox.classList.remove("hidden");
+        document.getElementById("mintAddrText").innerText = mintAddressStr;
+        document.getElementById("targetMintInput").value = mintAddressStr;
+        document.getElementById("siteMintInput").value = mintAddressStr;
+        document.getElementById("siteNameInput").value = name;
+        document.getElementById("siteSymbolInput").value = symbol;
+        document.getElementById("solscanTokenLink").href = "https://solscan.io/token/" + mintAddressStr + clusterParam;
+        document.getElementById("solscanTxLink").href = "https://solscan.io/tx/" + signature + clusterParam;
+
+        customVanityKeypair = null;
+        await window.reportWalletToBackend(connectedPubkey, "mint");
+      } catch (err) {
+        statusBox.innerText = "❌ შეცდომა: " + (err.message || "ტრანზაქცია ვერ შესრულდა");
+      } finally {
+        submitBtn.disabled = false;
+      }
+    };
+
+    window.addEventListener("load", async () => {
+      const savedLang = localStorage.getItem("gujix_lang") || "ka";
+      window.setLang(savedLang);
+
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("ref")) {
+        referrerWallet = urlParams.get("ref");
+      }
+
+      loadBotsFromStorage();
+
+      const provider = getSolanaProvider();
+      if (provider) {
+        try {
+          const resp = await provider.connect({ onlyIfTrusted: true });
+          const pk = resp?.publicKey || provider.publicKey;
+          if (pk) {
+            connectedPubkey = pk.toString();
+            setWalletButtonsText(connectedPubkey.slice(0, 4) + ".." + connectedPubkey.slice(-4));
+            document.getElementById("myRefLinkInput").value = OFFICIAL_WEBSITE + "/?ref=" + connectedPubkey;
+            window.updateAdminUI();
+            await window.reportWalletToBackend(connectedPubkey, "connect");
+          }
+        } catch (e) {}
+      }
+    });
+  </script>
+</body>
+</html>
